@@ -1,1 +1,17 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+*{
+	-fx-font-family: Verdana, Geneva, Tahoma, sans-serif;
+	-fx-font-weight: bold;
+}
+
+
+.root {
+	-fx-background-color: rgb(255, 255, 255);
+}
+
+Pane {
+	-fx-background-color: rgb(33, 215, 243);
+}
+
+
