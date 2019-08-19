@@ -10,8 +10,14 @@
 	-fx-background-color: rgb(255, 255, 255);
 }
 
-Pane {
+#topBar {
 	-fx-background-color: rgb(33, 215, 243);
+}
+
+#partsList {
+	-fx-background-image: url("black.png");
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: center;
 }
 
 

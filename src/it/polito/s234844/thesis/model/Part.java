@@ -8,11 +8,13 @@ import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 public class Part {
 
 	String part_number;
+	String description;
 	List<String> customers;
 	SummaryStatistics stat;
 	
-	public Part(String part_number) {
+	public Part(String part_number, String description) {
 		this.part_number = part_number;
+		this.description = description;
 		this.customers = new ArrayList<String>();
 		this.stat = new SummaryStatistics();
 	}
@@ -21,6 +23,10 @@ public class Part {
 		return part_number;
 	}
 	
+	public String getDescription() {
+		return description;
+	}
+
 	public void addCustomer(String customer) {
 		if(!this.customers.contains(customer))
 			this.customers.add(customer);

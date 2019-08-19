@@ -57,7 +57,7 @@ public class OrdersDAO {
 	 * @return the full {@link List} of {@link Part}
 	 */
 	public List<Part> loadParts(){
-		final String sql ="SELECT DISTINCT Part_Number FROM orders ORDER BY Part_Number ASC";
+		final String sql ="SELECT DISTINCT Part_Number, Description FROM orders ORDER BY Part_Number ASC";
 		
 		try {
 			//Creation of the connection and preparedStatement objects
@@ -70,9 +70,10 @@ public class OrdersDAO {
 			//Loop on the result rows
 			while(rs.next()) {
 				String part_number = rs.getString("Part_Number");
+				String description = rs.getString("Description");
 				
 				if(part_number != null) {
-					Part part = new Part(part_number);
+					Part part = new Part(part_number, description);
 					parts.add(part);
 				}
 			}

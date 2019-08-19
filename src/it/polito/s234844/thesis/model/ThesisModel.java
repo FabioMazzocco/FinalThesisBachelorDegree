@@ -9,14 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.math3.distribution.NormalDistribution;
+//import org.apache.commons.math3.distribution.NormalDistribution;
 
 import it.polito.s234844.thesis.db.OrdersDAO;
 
 public class ThesisModel {
-	
-	private int MIN_YEAR;
-	private int MAX_YEAR;
 	
 	//General variables
 	private OrdersDAO dao;
@@ -28,7 +25,7 @@ public class ThesisModel {
 	
 	//Due date variables
 	private DueDateCalculator dueDate;
-	private NormalDistribution normal;
+//	private NormalDistribution normal;
 	
 	//Best rate variables
 	private Map<String, Integer> lastOrder;
@@ -38,6 +35,8 @@ public class ThesisModel {
 	
 	//Simulation variables
 	private Simulator simulator;
+	private Integer MIN_YEAR;
+	private Integer MAX_YEAR;
 	
 	public ThesisModel() {
 		this.dao = new OrdersDAO();
@@ -52,6 +51,8 @@ public class ThesisModel {
 		this.bestRate = 0.0;
 		this.simulator = new Simulator();
 		this.errors = "";
+		this.MIN_YEAR = null;
+		this.MAX_YEAR = null;
 	}
 	
 
@@ -70,7 +71,7 @@ public class ThesisModel {
 	
 	
 	/**
-	 * This method combines 3 methods to load data and checks if any of the 3 failed
+	 * This method combines 4 methods to load data and checks if any of the 4 failed
 	 * @return {@code true} if everything worked properly, {@code false} else
 	 */
 	public boolean loadData() {
@@ -79,7 +80,7 @@ public class ThesisModel {
 		this.loadOrders();
 		this.loadMinMaxYears();
 		
-		if(this.customersList.size()==0 || this.partsList.size()==0 || this.ordersList.size()==0)
+		if(this.customersList.size()==0 || this.partsList.size()==0 || this.ordersList.size()==0 || this.MIN_YEAR==null || this.MAX_YEAR==null)
 			return false;
 		return true;
 	}

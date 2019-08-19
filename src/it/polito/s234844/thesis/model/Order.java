@@ -89,8 +89,8 @@ public class Order implements Comparable<Order>{
 
 	@Override
 	public String toString() {
-		return "(" + part_number + " - " + quantity
-				+ "pcs)";
+		return part_number + " - "+ description + " - " + quantity
+				+ "pcs";
 	}
 
 	@Override
