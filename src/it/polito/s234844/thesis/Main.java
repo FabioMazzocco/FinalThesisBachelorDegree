@@ -3,7 +3,6 @@ package it.polito.s234844.thesis;
 import it.polito.s234844.thesis.model.ThesisModel;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +16,7 @@ public class Main extends Application {
 			BorderPane root = loader.load();
 			ThesisController controller = loader.getController();
 			ThesisModel model = new ThesisModel();
-			controller.setModel(model);
+			controller.setModel(model, primaryStage);
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);

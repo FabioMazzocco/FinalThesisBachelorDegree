@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.s234844.thesis.DueDateQuotingController">
+   <top>
+      <Pane BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="226.0" layoutY="3.0" text="DUE DATE TOOL" />
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </Pane>
+   </top>
+   <center>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <GridPane>
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="124.0" text="Choose probability" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <Slider fx:id="dueDateQuotingSlider" blockIncrement="0.01" majorTickUnit="0.1" max="1.0" minorTickCount="0" onDragDone="#handleDueDateQuotation" showTickLabels="true" value="0.5" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <cursor>
+                        <Cursor fx:constant="W_RESIZE" />
+                     </cursor>
+                  </Slider>
+               </children>
+            </GridPane>
+            <AreaChart title="Probability">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis side="LEFT" />
+              </yAxis>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+            </AreaChart>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
+      </VBox>
+   </center>
+</BorderPane>

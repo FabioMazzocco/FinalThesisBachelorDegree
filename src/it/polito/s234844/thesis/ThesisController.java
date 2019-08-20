@@ -1,5 +1,6 @@
 package it.polito.s234844.thesis;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,7 +15,9 @@ import it.polito.s234844.thesis.model.Part;
 import it.polito.s234844.thesis.model.ThesisModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
@@ -23,8 +26,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class ThesisController {
@@ -32,10 +37,12 @@ public class ThesisController {
 	final String error = "-fx-border-color: red; -fx-border-width: 2px;";
 	final String noError ="-fx-border-color: none;";
 	
-	ThesisModel model = null;
+	ThesisModel model;
+	Stage primaryStage;
 	HashMap<String, Integer> orderMap;
 	
 	public ThesisController() {
+		this.primaryStage = null;
 		this.model = null;
 		this.orderMap = new HashMap<String, Integer>();
 	}
@@ -45,7 +52,10 @@ public class ThesisController {
 
     @FXML
     private URL location;
-
+    
+    @FXML
+    private BorderPane dueDateQuotingPane;
+    
     @FXML
     private ComboBox<Part> cbParts;
 
@@ -125,13 +135,16 @@ public class ThesisController {
     }
 
     @FXML
-    void handleDueDateProbability(ActionEvent event) {
-
+    void handleDueDateQuoting(ActionEvent event) throws IOException{
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polito/s234844/thesis/DueDateQuoting.fxml"));
+    	BorderPane dueDatePane = loader.load();
+    	Scene dueDateScene = new Scene(dueDatePane);
+    	this.primaryStage.setScene(dueDateScene);
     }
-
+    
     @FXML
-    void handleDueDateQuoting(ActionEvent event) {
-
+    void handleDueDateProbability(ActionEvent event) {
+    	
     }
 
     @FXML
@@ -150,9 +163,7 @@ public class ThesisController {
     	}
     }
     
-
-    
-    
+  
     
     
     /* ======================================================================================================================================== */
@@ -174,8 +185,9 @@ public class ThesisController {
         this.datePicker.setDayCellFactory(getDayCellFactory());
     }
 
-    public void setModel(ThesisModel model) {
+    public void setModel(ThesisModel model, Stage primaryStage) {
     	this.grid.setDisable(true);
+    	this.primaryStage = primaryStage;
     	this.model = model;
     	this.model.loadData();
     	this.cbParts.getItems().addAll(this.model.getPartsList());
