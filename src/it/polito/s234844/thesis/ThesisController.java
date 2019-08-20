@@ -140,6 +140,7 @@ public class ThesisController {
     	BorderPane dueDatePane = loader.load();
     	Scene dueDateScene = new Scene(dueDatePane);
     	this.primaryStage.setScene(dueDateScene);
+    	((DueDateQuotingController)loader.getController()).setOrder(this.model, this.orderMap);
     }
     
     @FXML

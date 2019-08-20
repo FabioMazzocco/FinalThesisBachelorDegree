@@ -45,7 +45,7 @@ public class TestModel {
 		
 		
 		//Simulation
-		System.out.println(model.simulate(LocalDate.now().plusDays(5), orderMap, 10, LocalDate.now(), LocalDate.now().plusDays(7), 0));
+		System.out.println(model.simulate(LocalDate.now().plusDays(5), orderMap, 10, LocalDate.now(), LocalDate.now().plusDays(7), 3));
 	}
 
 }

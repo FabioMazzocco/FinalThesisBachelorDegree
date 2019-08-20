@@ -32,6 +32,7 @@ public class Simulator {
 	private int actualOrders;
 	private int actualQuantity;
 	private int inTimeOrders;
+	private int inStockOrders;
 	private LocalDate orderStart;
 	private LocalDate orderEnd;
 	private Duration totalIdleness;
@@ -83,6 +84,7 @@ public class Simulator {
 		this.actualOrders = 0;
 		this.actualQuantity = 0;
 		this.inTimeOrders = 0;
+		this.inStockOrders = 0;
 		this.orderStart = LocalDate.MIN;
 		this.orderEnd = LocalDate.MAX;
 		this.totalIdleness = Duration.ofDays(0);
@@ -122,6 +124,8 @@ public class Simulator {
 			line.addEvent(o, this.currentDate);
 			//Random #days calculation
 			Integer days = this.randomDays(o.getPart_number());
+			if(days == 0)
+				this.inStockOrders++;
 			//Setting of the production dates (start&end) to the line
 			line.setOccupiedTill(this.currentDate, this.currentDate.plusDays(days));
 			
@@ -241,7 +245,8 @@ public class Simulator {
 		result += String .format("%d out of %d pieces treated (%.2f%%)\n", this.actualQuantity, this.totalQuantity, 100*(double)this.actualQuantity/this.totalQuantity);
 		
 		result += this.inTimeOrders +" orders started the day when the order was received\n";
-		if(this.orderStart.equals(LocalDate.MIN))
+		result += this.inStockOrders +" orders satisfied with the stock\n";
+ 		if(this.orderStart.equals(LocalDate.MIN))
 			result += "The order wasn't started during the selected period\n";
 		else {
 			result += "The order started on "+ this.orderStart.format(this.italian) + " and ended on " +

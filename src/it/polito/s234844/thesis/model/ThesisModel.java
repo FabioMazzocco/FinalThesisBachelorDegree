@@ -292,7 +292,11 @@ public class ThesisModel {
 	
 	
 	
-	
+//	public NormalDistribution getNormalDistribution(HashMap<String, Integer> orderMap) {
+//		//Add check on orderMap
+//
+//		
+//	}
 	
 	
 	

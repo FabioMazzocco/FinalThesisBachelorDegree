@@ -112,6 +112,7 @@ public class DueDateCalculator {
 		return totalProbability;
 	}
 	
+	
 	private Double composedMean(List<Part> parts) {
 		Double mean = 0.0;
 		
