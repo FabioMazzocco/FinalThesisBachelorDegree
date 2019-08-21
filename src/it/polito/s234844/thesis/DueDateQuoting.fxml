@@ -5,8 +5,10 @@
 <?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -21,7 +23,10 @@
    <top>
       <Pane BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="226.0" layoutY="3.0" text="DUE DATE TOOL" />
+            <Label fx:id="dueDateQuotingTop" layoutX="226.0" layoutY="2.0" text="DUE DATE TOOL">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
          </children>
          <BorderPane.margin>
             <Insets />
@@ -31,36 +36,49 @@
    <center>
       <VBox BorderPane.alignment="CENTER">
          <children>
-            <GridPane>
+            <GridPane prefHeight="30.0" prefWidth="169.0">
               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" minWidth="10.0" prefWidth="211.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.0" minWidth="10.0" prefWidth="289.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="245.0" minWidth="10.0" prefWidth="109.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="313.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="289.0" minWidth="10.0" prefWidth="79.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="124.0" text="Choose probability" GridPane.halignment="CENTER" GridPane.valignment="TOP" />
-                  <Slider fx:id="dueDateQuotingSlider" blockIncrement="0.01" majorTickUnit="0.1" max="1.0" minorTickCount="0" onDragDone="#handleDueDateQuotation" prefHeight="33.0" prefWidth="270.0" showTickLabels="true" value="0.5" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <Label contentDisplay="CENTER" prefHeight="17.0" prefWidth="124.0" text="Choose probability" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
+                  <Slider fx:id="dueDateQuotingSlider" blockIncrement="0.01" majorTickUnit="0.1" max="0.9999999999" min="1.0E-10" minorTickCount="0" prefHeight="33.0" prefWidth="268.0" showTickLabels="true" value="0.5" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <cursor>
                         <Cursor fx:constant="W_RESIZE" />
                      </cursor>
                   </Slider>
+                  <TextField fx:id="txtProbability" alignment="CENTER_RIGHT" maxWidth="50.0" minWidth="50.0" onAction="#changeProbability" opacity="0.77" prefWidth="50.0" promptText="0.00%" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
                </children>
             </GridPane>
             <GridPane>
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="431.0" minWidth="10.0" prefWidth="426.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label fx:id="txtSerialProduction" text="Serial" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
-                  <ToggleButton fx:id="btnSerialParallelProduction" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleSerialParallelProduction" text="Serial production" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <Label fx:id="txtParallelProduction" disable="true" text="Parallel" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="193.0" minWidth="10.0" prefWidth="193.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="162.0" minWidth="10.0" prefWidth="149.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="10.0" prefWidth="90.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label fx:id="txtSerialProduction" text="Serial" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+                        <ToggleButton fx:id="btnSerialParallelProduction" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleSerialParallelProduction" text="Serial production" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label fx:id="txtParallelProduction" disable="true" text="Parallel" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
+                     </children>
+                  </GridPane>
+                  <Button fx:id="btnCalculate" mnemonicParsing="false" onAction="#handleDueDateQuotation" text="Calculate" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
                </children>
                <VBox.margin>
                   <Insets top="20.0" />
@@ -68,11 +86,11 @@
             </GridPane>
             <GridPane prefHeight="30.0" prefWidth="460.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="383.0" minWidth="10.0" prefWidth="209.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="260.0" minWidth="0.0" prefWidth="75.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="408.0" minWidth="0.0" prefWidth="45.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="626.0" minWidth="10.0" prefWidth="88.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="626.0" minWidth="10.0" prefWidth="83.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="383.0" minWidth="10.0" prefWidth="230.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="260.0" minWidth="0.0" prefWidth="69.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="408.0" minWidth="0.0" prefWidth="96.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="626.0" minWidth="3.0" prefWidth="71.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="626.0" minWidth="10.0" prefWidth="34.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -91,7 +109,7 @@
                         <Font name="System Bold Italic" size="15.0" />
                      </font>
                   </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" days (" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" days            (" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
                      <font>
                         <Font size="15.0" />
                      </font>
@@ -116,9 +134,23 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
                <VBox.margin>
-                  <Insets top="20.0" />
+                  <Insets top="15.0" />
                </VBox.margin>
             </AreaChart>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="btnHome" mnemonicParsing="false" onAction="#goBackHome" text="Home" />
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </GridPane>
          </children>
          <BorderPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

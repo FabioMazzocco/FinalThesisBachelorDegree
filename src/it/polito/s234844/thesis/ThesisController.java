@@ -39,6 +39,7 @@ public class ThesisController {
 	
 	ThesisModel model;
 	Stage primaryStage;
+	Scene thisScene;
 	HashMap<String, Integer> orderMap;
 	
 	public ThesisController() {
@@ -140,7 +141,7 @@ public class ThesisController {
     	BorderPane dueDatePane = loader.load();
     	Scene dueDateScene = new Scene(dueDatePane);
     	this.primaryStage.setScene(dueDateScene);
-    	((DueDateQuotingController)loader.getController()).setOrder(this.model, this.orderMap);
+    	((DueDateQuotingController)loader.getController()).setOrder(this, this.model, this.orderMap, this.datePicker.getValue());
     }
     
     @FXML
@@ -186,7 +187,7 @@ public class ThesisController {
         this.datePicker.setDayCellFactory(getDayCellFactory());
     }
 
-    public void setModel(ThesisModel model, Stage primaryStage) {
+    public void setModel(ThesisModel model, Stage primaryStage, Scene thisScene) {
     	this.grid.setDisable(true);
     	this.primaryStage = primaryStage;
     	this.model = model;

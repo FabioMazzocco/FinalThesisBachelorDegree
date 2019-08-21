@@ -16,9 +16,9 @@ public class Main extends Application {
 			BorderPane root = loader.load();
 			ThesisController controller = loader.getController();
 			ThesisModel model = new ThesisModel();
-			controller.setModel(model, primaryStage);
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			controller.setModel(model, primaryStage, scene);
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("DUE DATE TOOL by Fabio Mazzocco");
 			primaryStage.setResizable(false);

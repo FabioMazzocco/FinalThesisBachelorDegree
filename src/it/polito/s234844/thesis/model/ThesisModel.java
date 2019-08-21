@@ -170,45 +170,52 @@ public class ThesisModel {
 	/**
 	 * Due Date Quoting based on the order parts list, the order date and the given probability to estimate the due date based on the mean and the variance of the 
 	 * past production times
-	 * @param partsNumber is the {@link List} of {@link Part}s of the order (chosen by the user)
+	 * @param orderMap is the {@link HashMap} of the order (chosen by the user)
 	 * @param orderDate is the {@link LocalDate} in which the order has been received (null if no date was chosen --> today)
 	 * @param probability is the {@link Double} value which represents the probability requested for the searched date to clear the given order
 	 * @param isParallel is {@code true} if the parts can be processed in parallel, {@code false} else
-	 * @return a {@link String} with the result and/or the errors occurred (e.g. non-esistent part number) 
+	 * @return 
 	 */
-	public String dueDateQuoting(List<String> partsNumber, LocalDate orderDate, Double probability, int parallelParts) {
+	public List<Object> dueDateQuoting(HashMap<String, Integer> orderMap, LocalDate orderDate, Double probability, boolean isParallel) {
 		
-		String result = "";
 		this.errors = "";
+		
+		List<Object> result = new ArrayList<Object>();
 		
 		//Conversion from String to Part object and check on the orderDate and the partsNumber list (creation of a list of occurred errors if needed)
 		//If no parts were selected --> can't continue. If the probability is an invalid value --> can't continue
-		List<Part> parts = this.checkDueDateInput(partsNumber, parallelParts);
-		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0)
-			return this.errors;
-		else if(this.errors.compareTo("Ops! Please choose a valid number of parts that can be produced simultaneously")==0)
-			return this.errors;
+		List<Part> parts = this.checkInput(orderMap, isParallel);
+		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0 || 
+				this.errors.compareTo("Ops! Please choose a valid number of parts that can be produced simultaneously")==0) {
+			result.add(null);
+			result.add(this.errors);
+			return result;
+		}
 		//If no date was chosen or (even if isn't allowed) it's in the past --> the date considered is today
 		if(orderDate == null || orderDate.isBefore(LocalDate.now()))
 			orderDate = LocalDate.now();
 		
 		//The probability can't be outside the interval between 0 and 1 (excluded)
-		if(probability<=0 || probability>=1)
-			return "Ops! The chosen probability should be between 0% and 100% (excluded)";
+		if(probability<=0 || probability>=1) {
+			this.errors += "Ops! The chosen probability should be between 0% and 100% (excluded)";
+			result.add(null);
+			result.add(this.errors);
+			return result;
+		}
 		
 		//Due date quoting through the dedicated class and result creation (with errors occurred if needed)
 		Integer days = null;
-		if(parallelParts == 1)
+		if(isParallel == false)
 			days = dueDate.dueDateQuoting(parts, probability);
-		else if(parallelParts >= parts.size())
-			days = dueDate.dueDateQuotingParallel(parts, probability);
 		else
-			days = null; //DA FARE!!! ------------------------------------------ caso intermedio
+			days = dueDate.dueDateQuotingParallel(parts, probability);
+
 		
-		result = String.format("The selected order will be available (%.2f%% probability) on %s", probability*100, orderDate.plusDays(days));
-		if(errors.compareTo("")!=0)
-			errors = "\nThese errors occurred: "+errors;
-		return result+errors;
+		//Error management to be added TBD
+
+		result.add(days);
+		result.add(this.errors);
+		return result;
 	}
 	
 	
@@ -221,14 +228,14 @@ public class ThesisModel {
 	 * @param parallelParts is the number
 	 * @return a {@link String} with the result of the analysis and/or the occurred errors
 	 */
-	public String dueDateProbability(List<String> partsNumber, LocalDate orderDate, LocalDate requestedDate, int parallelParts) {
+	public String dueDateProbability(HashMap<String, Integer> orderMap, LocalDate orderDate, LocalDate requestedDate, boolean isParallel) {
 		String result = "";
 		this.errors = "";
 		
 		//Conversion from String to Part object and check on the orderDate and the partsNumber list (creation of a list of occurred errors if needed)
 		//If no parts were selected --> can't continue. If the requested date is null or before the order date --> converted to today's date. If
 		//the number of parts that can be produced simultaneously is an invalid number --> can't continue
-		List<Part> parts = checkDueDateInput(partsNumber, parallelParts);
+		List<Part> parts = checkInput(orderMap, isParallel);
 		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0)
 			return this.errors;
 		else if(this.errors.compareTo("Ops! Please choose a valid number of parts that can be produced simultaneously")==0)
@@ -242,12 +249,10 @@ public class ThesisModel {
 		Duration days = Duration.between(orderDate.atStartOfDay(), requestedDate.atStartOfDay());
 		Double probability = null;
 				
-		if(parallelParts == 1)
+		if(isParallel == false)
 			probability = dueDate.dueDateProbability(parts, (int)days.toDays());
-		else if(parallelParts >= parts.size())
+		else 
 			probability = dueDate.dueDateProbabilityParallel(parts, (int)days.toDays());
-		else
-			probability = null;//DA FARE!!!!! ------------------------------------------ caso intermedio
 		
 		result = String.format("The chosen due date (%d days) for the selected order has %.2f%% probability", (int)days.toDays() ,probability*100);
 		if(errors.compareTo("")!=0)
@@ -263,22 +268,17 @@ public class ThesisModel {
 	 * @param orderDate is the {@link LocalDate} in which the order is received
 	 * @return the {@link List} of {@link Part}s object from the string list and creates a errors message if needed
 	 */
-	private List<Part> checkDueDateInput(List<String> partsNumber, int parallelParts){
+	private List<Part> checkInput(HashMap<String, Integer> orderMap, boolean isParallel){
 		//If no goods were selected --> there's no need to continue
-		if(partsNumber.size() == 0) {
+		if(orderMap.size() == 0) {
 			this.errors = "Ops! Please choose some products to make this tool work";
 			return null;
 		}
 		
-		//If the parts that can be produced simultaneously is less than 1 --> error, can't continue
-		if(parallelParts < 1) {
-			this.errors = "Ops! Please choose a valid number of parts that can be produced simultaneously";
-			return null;
-		}
 		
 		//Conversion from the part-number to the Part object (checking if the p/n exists)
 		List<Part> parts = new ArrayList<Part>();
-		for(String s : partsNumber) {
+		for(String s : orderMap.keySet()) {
 			Part part = this.partsMap.get(s);
 			if(part==null) {
 				this.errors += "\n The part number '"+s+"' does not exist!";
@@ -324,7 +324,7 @@ public class ThesisModel {
 		this.errors="";
 		
 		//Check on the chosen part-numbers (p/n), the number of p/n and updates the occurred errors message if needed
-		List<Part> parts = this.checkInput(orderMap.keySet());
+		List<Part> parts = this.checkInput(orderMap, false);
 		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0)
 			return this.errors;
 		//If no date was chosen or (even if isn't allowed) it's in the past --> the date considered is today
@@ -445,16 +445,7 @@ public class ThesisModel {
 		return result;
 	}
 	
-	
-	/**
-	 * Tranforms the {@link Set} into a {@link List} to use the method to check the validity of the data already used for the Due Date
-	 */
-	private List<Part> checkInput(Set<String> keySet) {
-		List<String> partsNumber = new ArrayList<String>();
-		for(String s : keySet)
-			partsNumber.add(s);
-		return this.checkDueDateInput(partsNumber, 1);
-	}
+
 	
 	
 	
@@ -474,7 +465,7 @@ public class ThesisModel {
 	public String simulate(LocalDate orderDate, HashMap<String, Integer> orderMap, Integer parallelParts, LocalDate start, LocalDate end, int yearsBefore) {
 		String result="";
 		
-		this.checkInput(orderMap.keySet());
+		this.checkInput(orderMap, false);
 		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0)
 			return this.errors;
 		//Dates check
