@@ -40,11 +40,13 @@ public class ThesisController {
 	ThesisModel model;
 	Stage primaryStage;
 	Scene thisScene;
+	Stage secondaryStage;
 	HashMap<String, Integer> orderMap;
 	
 	public ThesisController() {
 		this.primaryStage = null;
 		this.model = null;
+		this.secondaryStage = null;
 		this.orderMap = new HashMap<String, Integer>();
 	}
 	
@@ -140,7 +142,11 @@ public class ThesisController {
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polito/s234844/thesis/DueDateQuoting.fxml"));
     	BorderPane dueDatePane = loader.load();
     	Scene dueDateScene = new Scene(dueDatePane);
-    	this.primaryStage.setScene(dueDateScene);
+    	this.secondaryStage = new Stage();
+    	this.secondaryStage.setResizable(false);
+    	this.secondaryStage.setScene(dueDateScene);
+    	this.primaryStage.hide();
+    	this.secondaryStage.show();
     	((DueDateQuotingController)loader.getController()).setOrder(this, this.model, this.orderMap, this.datePicker.getValue());
     }
     
@@ -201,6 +207,8 @@ public class ThesisController {
     	this.partsList.getItems().clear();
     	this.grid.setDisable(true);
     	this.datePicker.setValue(null);
+    	this.cbParts.setValue(null);
+    	this.txtQuantity.clear();
     }
     
     private void manageGrid() {
@@ -240,4 +248,11 @@ public class ThesisController {
         };
         return dayCellFactory;
     }
+
+
+	public void returnToPrimary() {
+		this.secondaryStage.hide();
+		this.secondaryStage.close();
+		this.primaryStage.show();		
+	}
 }

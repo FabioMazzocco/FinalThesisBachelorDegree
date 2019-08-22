@@ -112,6 +112,10 @@ public class DueDateCalculator {
 		return totalProbability;
 	}
 	
+	public NormalDistribution getNormal(List<Part> parts) {
+		return new NormalDistribution(this.composedMean(parts), this.composedStdDev(parts));
+	}
+	
 	
 	private Double composedMean(List<Part> parts) {
 		Double mean = 0.0;

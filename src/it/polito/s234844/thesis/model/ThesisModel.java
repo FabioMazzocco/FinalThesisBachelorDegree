@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 //import org.apache.commons.math3.distribution.NormalDistribution;
 
@@ -176,19 +175,19 @@ public class ThesisModel {
 	 * @param isParallel is {@code true} if the parts can be processed in parallel, {@code false} else
 	 * @return 
 	 */
-	public List<Object> dueDateQuoting(HashMap<String, Integer> orderMap, LocalDate orderDate, Double probability, boolean isParallel) {
+	public HashMap<String, Object> dueDateQuoting(HashMap<String, Integer> orderMap, LocalDate orderDate, Double probability, boolean isParallel) {
 		
 		this.errors = "";
 		
-		List<Object> result = new ArrayList<Object>();
+		HashMap<String, Object> result = new HashMap<String, Object>();
 		
 		//Conversion from String to Part object and check on the orderDate and the partsNumber list (creation of a list of occurred errors if needed)
 		//If no parts were selected --> can't continue. If the probability is an invalid value --> can't continue
 		List<Part> parts = this.checkInput(orderMap, isParallel);
 		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0 || 
 				this.errors.compareTo("Ops! Please choose a valid number of parts that can be produced simultaneously")==0) {
-			result.add(null);
-			result.add(this.errors);
+			result.put("days",null);
+			result.put("errors", this.errors);
 			return result;
 		}
 		//If no date was chosen or (even if isn't allowed) it's in the past --> the date considered is today
@@ -198,8 +197,8 @@ public class ThesisModel {
 		//The probability can't be outside the interval between 0 and 1 (excluded)
 		if(probability<=0 || probability>=1) {
 			this.errors += "Ops! The chosen probability should be between 0% and 100% (excluded)";
-			result.add(null);
-			result.add(this.errors);
+			result.put("days", null);
+			result.put("errors", this.errors);
 			return result;
 		}
 		
@@ -209,12 +208,13 @@ public class ThesisModel {
 			days = dueDate.dueDateQuoting(parts, probability);
 		else
 			days = dueDate.dueDateQuotingParallel(parts, probability);
-
+		
 		
 		//Error management to be added TBD
-
-		result.add(days);
-		result.add(this.errors);
+		
+		result.put("days", days);
+		result.put("errors",this.errors);
+		result.put("normal", this.dueDate.getNormal(parts));
 		return result;
 	}
 	
