@@ -130,31 +130,53 @@ public class ThesisController {
     	this.txtQuantity.clear();
     	this.cbParts.setValue(null);
     }
+   
+
+    @FXML
+    void handleDueDateQuoting(ActionEvent event){
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polito/s234844/thesis/DueDateQuoting.fxml"));
+    	BorderPane dueDatePane;
+		try {
+			dueDatePane = loader.load();
+			Scene dueDateScene = new Scene(dueDatePane);
+//			dueDateScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+	    	this.secondaryStage = new Stage();
+	    	this.secondaryStage.setResizable(false);
+	    	this.secondaryStage.setScene(dueDateScene);
+	    	this.secondaryStage.setTitle("DUE DATE TOOL by Fabio Mazzocco");
+	    	this.primaryStage.hide();
+	    	this.secondaryStage.show();
+	    	((DueDateQuotingController)loader.getController()).setOrder(this, this.model, this.orderMap, this.datePicker.getValue());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
     
+    @FXML
+    void handleDueDateProbability(ActionEvent event) {
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polito/s234844/thesis/DueDateProbability.fxml"));
+    	BorderPane dueDatePane;
+		try {
+			dueDatePane = loader.load();
+			Scene dueDateScene = new Scene(dueDatePane);
+//			dueDateScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+	    	this.secondaryStage = new Stage();
+	    	this.secondaryStage.setResizable(false);
+	    	this.secondaryStage.setScene(dueDateScene);
+	    	this.secondaryStage.setTitle("DUE DATE TOOL by Fabio Mazzocco");
+	    	this.primaryStage.hide();
+	    	this.secondaryStage.show();
+	    	((DueDateProbabilityController)loader.getController()).setOrder(this, this.model, this.orderMap, this.datePicker.getValue());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 
     @FXML
     void handleBestRate(ActionEvent event) {
 
     }
-
-    @FXML
-    void handleDueDateQuoting(ActionEvent event) throws IOException{
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polito/s234844/thesis/DueDateQuoting.fxml"));
-    	BorderPane dueDatePane = loader.load();
-    	Scene dueDateScene = new Scene(dueDatePane);
-    	this.secondaryStage = new Stage();
-    	this.secondaryStage.setResizable(false);
-    	this.secondaryStage.setScene(dueDateScene);
-    	this.primaryStage.hide();
-    	this.secondaryStage.show();
-    	((DueDateQuotingController)loader.getController()).setOrder(this, this.model, this.orderMap, this.datePicker.getValue());
-    }
     
-    @FXML
-    void handleDueDateProbability(ActionEvent event) {
-    	
-    }
-
     @FXML
     void handleSimulation(ActionEvent event) {
 
@@ -237,7 +259,7 @@ public class ThesisController {
                     public void updateItem(LocalDate item, boolean empty) {
                         super.updateItem(item, empty);
  
-                        // Disable Monday, Tueday, Wednesday.
+                        // Disable all dates before today
                         if (item.isBefore(LocalDate.now())){
                             setDisable(true);
                             setStyle("-fx-background-color: #ffc0cb;");

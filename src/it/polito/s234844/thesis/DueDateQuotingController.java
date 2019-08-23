@@ -1,12 +1,9 @@
 package it.polito.s234844.thesis;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import it.polito.s234844.thesis.model.ThesisModel;
 import javafx.fxml.FXML;
-import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,6 +20,7 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.Pane;
 
 public class DueDateQuotingController {
 
@@ -33,6 +31,9 @@ public class DueDateQuotingController {
 //	private HashMap<String, Part> partsMap;
 	private boolean isParallel;
 	
+	private final String bold = "-fx-font-weight: bold;";
+	private final String normal = "-fx-font-weight: 400";
+	
 	@FXML
     private ResourceBundle resources;
 
@@ -40,7 +41,7 @@ public class DueDateQuotingController {
     private URL location;
     
     @FXML
-    private Label dueDateQuotingTop;
+    private Pane dueDateQuotingTop;
     
     @FXML
     private Slider dueDateQuotingSlider;
@@ -84,12 +85,16 @@ public class DueDateQuotingController {
     	if(this.isParallel) {
     		this.isParallel = false;
     		this.txtParallelProduction.setDisable(true);
+    		this.txtParallelProduction.setStyle(this.normal);
     		this.txtSerialProduction.setDisable(false);
+    		this.txtSerialProduction.setStyle(this.bold);
     		this.btnSerialParallelProduction.setText("Serial production");
     	}else {
     		this.isParallel = true;
     		this.txtParallelProduction.setDisable(false);
+    		this.txtParallelProduction.setStyle(this.bold);
     		this.txtSerialProduction.setDisable(true);
+    		this.txtSerialProduction.setStyle(this.normal);
     		this.btnSerialParallelProduction.setText("Parallel production");
     	}
     }
@@ -126,12 +131,24 @@ public class DueDateQuotingController {
         assert dueDateQuotingSlider != null : "fx:id=\"dueDateQuotingSlider\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
         assert btnSerialParallelProduction != null : "fx:id=\"btnSerialParallelProduction\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
         assert dueDateQuotingChart != null : "fx:id=\"dueDateQuotingChart\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
+        
+        //Top bar
+        this.dueDateQuotingTop.setStyle("-fx-background-color: rgb(33, 215, 243);");
+        
+        //Slider
         this.txtProbability.textProperty().bind(
                 Bindings.format(
                     "%.2f%%",
                     this.dueDateQuotingSlider.valueProperty()
                 )
             );
+        
+        //Chart
+        this.dueDateQuotingChart.getXAxis().setTickLabelsVisible(false);
+    	this.dueDateQuotingChart.getXAxis().setTickMarkVisible(false);
+    	this.dueDateQuotingChart.getYAxis().setTickLabelsVisible(false);
+    	this.dueDateQuotingChart.getYAxis().setTickMarkVisible(false);
+    	
     }
     
     @FXML
@@ -146,13 +163,12 @@ public class DueDateQuotingController {
 		this.orderDate = orderDate;
 	}
 	
-	public void setChart(NormalDistribution normal) {
+	public void setChart(NormalDistribution normal) {		
 		this.dueDateQuotingChart.getData().clear();
 		
-
         XYChart.Series<String, Double> serie= new XYChart.Series<String, Double>();
         
-		for(double i=0; i<normal.inverseCumulativeProbability(0.9999999)+1; i++) {
+		for(double i=0; i<normal.inverseCumulativeProbability(0.9999999)+1; i = i+0.7) {
 			XYChart.Data<String, Double> data = new XYChart.Data<String, Double>(Double.toString(i), normal.density(i));
 			
 			serie.getData().add(data);

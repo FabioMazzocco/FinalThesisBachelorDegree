@@ -93,7 +93,7 @@ public class DueDateCalculator {
 	 * @return the {@link Double} value that represents the probability that the given parts can be produced in the given #days
 	 */
 	public Double dueDateProbabilityParallel(List<Part> parts, Integer days) {
-		//Case: no parts selected (shouldn't be possible)
+		//Case: no parts selected (impossible)
 		if(parts.size()==0)
 			return -1.0;
 		

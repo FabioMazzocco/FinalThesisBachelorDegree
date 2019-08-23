@@ -228,18 +228,25 @@ public class ThesisModel {
 	 * @param parallelParts is the number
 	 * @return a {@link String} with the result of the analysis and/or the occurred errors
 	 */
-	public String dueDateProbability(HashMap<String, Integer> orderMap, LocalDate orderDate, LocalDate requestedDate, boolean isParallel) {
-		String result = "";
+	public HashMap<String, Object> dueDateProbability(HashMap<String, Integer> orderMap, LocalDate orderDate, LocalDate requestedDate, boolean isParallel) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
 		this.errors = "";
 		
 		//Conversion from String to Part object and check on the orderDate and the partsNumber list (creation of a list of occurred errors if needed)
 		//If no parts were selected --> can't continue. If the requested date is null or before the order date --> converted to today's date. If
 		//the number of parts that can be produced simultaneously is an invalid number --> can't continue
 		List<Part> parts = checkInput(orderMap, isParallel);
-		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0)
-			return this.errors;
-		else if(this.errors.compareTo("Ops! Please choose a valid number of parts that can be produced simultaneously")==0)
-			return this.errors;
+		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0) {
+			result.put("probability", null);
+			result.put("error", this.errors);
+			return result;
+		}
+		else if(this.errors.compareTo("Ops! Please choose a valid number of parts that can be produced simultaneously")==0) {
+			result.put("probability", null);
+			result.put("error", this.errors);
+			return result;
+		}
 		//If no date was chosen or (even if isn't allowed) it's in the past --> the date considered is today
 		if(orderDate == null || orderDate.isBefore(LocalDate.now()))
 			orderDate = LocalDate.now();
@@ -251,13 +258,12 @@ public class ThesisModel {
 				
 		if(isParallel == false)
 			probability = dueDate.dueDateProbability(parts, (int)days.toDays());
-		else 
+		else
 			probability = dueDate.dueDateProbabilityParallel(parts, (int)days.toDays());
 		
-		result = String.format("The chosen due date (%d days) for the selected order has %.2f%% probability", (int)days.toDays() ,probability*100);
-		if(errors.compareTo("")!=0)
-			errors = "\nThese errors occurred: "+errors;
-		return result+errors;
+		result.put("probability", probability);
+		result.put("errors", this.errors);
+		return result;
 	}
 	
 	
@@ -269,12 +275,11 @@ public class ThesisModel {
 	 * @return the {@link List} of {@link Part}s object from the string list and creates a errors message if needed
 	 */
 	private List<Part> checkInput(HashMap<String, Integer> orderMap, boolean isParallel){
-		//If no goods were selected --> there's no need to continue
+		//If no goods were selected --> there's no need to continue (impossible)
 		if(orderMap.size() == 0) {
 			this.errors = "Ops! Please choose some products to make this tool work";
 			return null;
 		}
-		
 		
 		//Conversion from the part-number to the Part object (checking if the p/n exists)
 		List<Part> parts = new ArrayList<Part>();
@@ -289,15 +294,6 @@ public class ThesisModel {
 		}
 		return parts;
 	}
-	
-	
-	
-//	public NormalDistribution getNormalDistribution(HashMap<String, Integer> orderMap) {
-//		//Add check on orderMap
-//
-//		
-//	}
-	
 	
 	
 	
@@ -319,38 +315,54 @@ public class ThesisModel {
 	 * @param percentageOfParts is the {@link Double} value that represent the percentage of the total quantity that must be issued
 	 * @return a {@link String} with the result
 	 */
-	public String bestRate(HashMap<String, Integer> orderMap, LocalDate orderDate, Double probability, Double percentageOfParts) {
-		
+	public HashMap<String, Object> bestRate(HashMap<String, Integer> orderMap, LocalDate orderDate, Double probability, Double percentageOfParts) {
+		HashMap<String, Object> result = new HashMap<String, Object>();
 		this.errors="";
 		
 		//Check on the chosen part-numbers (p/n), the number of p/n and updates the occurred errors message if needed
 		List<Part> parts = this.checkInput(orderMap, false);
-		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0)
-			return this.errors;
+		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0) {
+			result.put("list", null);
+			result.put("errors", this.errors);
+			return result;
+		}
+			
 		//If no date was chosen or (even if isn't allowed) it's in the past --> the date considered is today
 		if(orderDate == null || orderDate.isBefore(LocalDate.now()))
 			orderDate = LocalDate.now();
 		//The probability can't be outside the interval between 0 and 1 (excluded) 
-		if(probability<=0 || probability>=1)
-			return "Ops! The chosen probability should be between 0% and 100% (excluded)";
+		if(probability<=0 || probability>=1) {
+			result.put("list", null);
+			result.put("errors", "Ops! The chosen probability should be between 0% and 100% (excluded)");
+			return result;
+		}
 		//Useless if there's only one part selected
-		if(orderMap.size() == 1)
-			return "Please select more than one product to calculate the best rate";
+		if(orderMap.size() == 1) {
+			result.put("list", null);
+			result.put("errors", "Please select more than one product to calculate the best rate");
+			return result;
+		}
 		
 		//Calculation of the minimum number of pieces
 		Integer totalQuantity = 0;
 		for(String s: orderMap.keySet())
 			totalQuantity += orderMap.get(s);
-		if(totalQuantity <= orderMap.size())
-			return "Please select at least one piece for each part";
+		if(totalQuantity <= orderMap.size()) {
+			result.put("list", null);
+			result.put("errors", "Please select at least one piece for each part");
+			return result;
+		}
 		double quantityDouble = totalQuantity * percentageOfParts;
 		if(quantityDouble - (int)quantityDouble > 0)
 			quantityDouble += 1;
 		Integer quantity = (int)quantityDouble;
 		
 		//If it's the same order & probability --> no need to do the recursion again
-		if(this.lastOrder.equals(orderMap) && this.lastProbability == probability)
-			return this.createResult(quantity, orderMap, probability, totalQuantity);
+		if(this.lastOrder.equals(orderMap) && this.lastProbability == probability) {
+			result.put("list", this.bestRateList);
+			result.put("errors", this.errors);
+			return result;
+		}
 		
 		this.bestRateList.clear();
 		this.bestRate = 0.0;
@@ -361,7 +373,9 @@ public class ThesisModel {
 		this.lastOrder = orderMap;
 		this.lastProbability = probability;
 		
-		return this.createResult(quantity, orderMap, probability, totalQuantity)+errors;
+		result.put("list", this.bestRateList);
+		result.put("errors", this.errors);
+		return result;
 	}
 	
 
@@ -405,14 +419,7 @@ public class ThesisModel {
 	 * Returns the number of days that are needed for the production and clearance of the parts with a certain probability
 	 */
 	private int daysPartial(List<Part> partial, double probability) {
-		//Pensare se fare la somma dei singoli tempi al 70% o se fare la due date
 		Integer days = this.dueDate.dueDateQuoting(partial, probability);
-//		Double dDays = 0.0;
-//		for(Part part : partial) {
-//			this.normal = new NormalDistribution(part.getMean(), part.getStandDev());
-//			dDays += this.normal.inverseCumulativeProbability(probability);
-//		}
-//		System.out.println("Singoli: "+dDays);
 		return days;
 	}
 

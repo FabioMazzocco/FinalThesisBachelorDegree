@@ -21,11 +21,11 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.s234844.thesis.DueDateQuotingController">
    <top>
-      <Pane BorderPane.alignment="CENTER">
+      <Pane fx:id="dueDateQuotingTop" prefHeight="60.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="dueDateQuotingTop" layoutX="226.0" layoutY="2.0" text="DUE DATE TOOL">
+            <Label layoutX="186.0" layoutY="13.0" text="DUE DATE TOOL">
                <font>
-                  <Font size="15.0" />
+                  <Font size="23.0" />
                </font></Label>
          </children>
          <BorderPane.margin>
@@ -74,12 +74,21 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label fx:id="txtSerialProduction" text="Serial" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
-                        <ToggleButton fx:id="btnSerialParallelProduction" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleSerialParallelProduction" text="Serial production" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Label fx:id="txtSerialProduction" text="Serial" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
+                        <ToggleButton fx:id="btnSerialParallelProduction" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleSerialParallelProduction" text="Serial production" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></ToggleButton>
                         <Label fx:id="txtParallelProduction" disable="true" text="Parallel" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
                      </children>
                   </GridPane>
-                  <Button fx:id="btnCalculate" mnemonicParsing="false" onAction="#handleDueDateQuotation" text="Calculate" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+                  <Button fx:id="btnCalculate" mnemonicParsing="false" onAction="#handleDueDateQuotation" text="Calculate" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Button>
                </children>
                <VBox.margin>
                   <Insets top="20.0" />
@@ -127,7 +136,7 @@
                   </Text>
                </children>
             </GridPane>
-            <LineChart fx:id="dueDateQuotingChart">
+            <LineChart fx:id="dueDateQuotingChart" createSymbols="false" legendVisible="false">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -143,7 +152,10 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnHome" mnemonicParsing="false" onAction="#goBackHome" text="Home" />
+                  <Button fx:id="btnHome" mnemonicParsing="false" onAction="#goBackHome" text="Home">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Button>
                </children>
                <VBox.margin>
                   <Insets top="10.0" />

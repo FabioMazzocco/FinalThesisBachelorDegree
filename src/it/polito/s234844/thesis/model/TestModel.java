@@ -32,7 +32,7 @@ public class TestModel {
 		
 		System.out.println("\n\n" + model.dueDateQuoting(orderMap,LocalDate.of(2019, 5, 20), 0.7, false));
 		
-//		System.out.println("\n\n"+model.dueDateProbability(orderMap, LocalDate.now(), LocalDate.now().plusDays(17), 5));
+		System.out.println("\n\n"+model.dueDateProbability(orderMap, LocalDate.now(), LocalDate.now().plusDays(17), false));
 		
 		
 		//Best rate
