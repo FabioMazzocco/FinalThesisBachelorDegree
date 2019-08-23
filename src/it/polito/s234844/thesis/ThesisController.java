@@ -174,7 +174,22 @@ public class ThesisController {
 
     @FXML
     void handleBestRate(ActionEvent event) {
-
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polito/s234844/thesis/BestRate.fxml"));
+    	BorderPane bestRatePane;
+		try {
+			bestRatePane = loader.load();
+			Scene bestRateScene = new Scene(bestRatePane);
+//			dueDateScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+	    	this.secondaryStage = new Stage();
+	    	this.secondaryStage.setResizable(false);
+	    	this.secondaryStage.setScene(bestRateScene);
+	    	this.secondaryStage.setTitle("DUE DATE TOOL by Fabio Mazzocco");
+	    	this.primaryStage.hide();
+	    	this.secondaryStage.show();
+	    	((BestRateController)loader.getController()).setOrder(this, this.model, this.orderMap);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
     @FXML

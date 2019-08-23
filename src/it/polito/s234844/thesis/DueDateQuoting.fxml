@@ -23,9 +23,9 @@
    <top>
       <Pane fx:id="dueDateQuotingTop" prefHeight="60.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="186.0" layoutY="13.0" text="DUE DATE TOOL">
+            <Label layoutX="181.0" layoutY="13.0" text="DUE DATE TOOL">
                <font>
-                  <Font size="23.0" />
+                  <Font name="System Bold" size="23.0" />
                </font></Label>
          </children>
          <BorderPane.margin>
