@@ -154,6 +154,16 @@ public class ThesisModel {
 	
 	}
 	
+	public Integer getMIN_YEAR() {
+		return MIN_YEAR;
+	}
+
+	public Integer getMAX_YEAR() {
+		return MAX_YEAR;
+	}
+	
+	
+	
 	
 	
 	
@@ -164,8 +174,8 @@ public class ThesisModel {
 	/* ======================================================================================================================================== */
 	/* ======================================================================================================================================== */
 	
-	
-	
+
+
 	/**
 	 * Due Date Quoting based on the order parts list, the order date and the given probability to estimate the due date based on the mean and the variance of the 
 	 * past production times
@@ -434,25 +444,6 @@ public class ThesisModel {
 			quantity += orderMap.get(part.getPart_number());
 		return quantity;
 	}
-	
-	
-	/**
-	 * Creates the {@link String} with all the data of the best rate solution
-	 */
-	private String createResult(int quantity, HashMap<String, Integer> orderMap, Double probability, Integer totalQuantity) {
-		//If there's no solution (useless, at least the solution is the full order)
-		if(this.bestRateList.size()==0)
-			return "There's no solution to this problem"; 
-		
-		Integer pieces = this.quantity(this.bestRateList, orderMap);
-		String result = String.format("\nThe best combination (%.2f%% probability) is:  " + this.bestRateList + "\n"
-				+ "with a rate of %.2f pcs/day, %d pieces (>=%d, min qty) in %d days\n"
-				+ "%.2f%% of the pcs in order",
-				probability, this.bestRate, pieces, quantity, this.daysPartial(this.bestRateList, probability) ,((double)pieces)/totalQuantity);
-					
-		return result;
-	}
-	
 
 	
 	

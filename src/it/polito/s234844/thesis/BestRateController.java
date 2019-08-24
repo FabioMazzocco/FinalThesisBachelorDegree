@@ -5,15 +5,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import it.polito.s234844.thesis.model.Order;
 import it.polito.s234844.thesis.model.Part;
 import it.polito.s234844.thesis.model.ThesisModel;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
@@ -105,8 +102,7 @@ public class BestRateController {
     			new PieChart.Data("Produced parts", (Integer)result.get("bestRatePieces")),
     			new PieChart.Data("Missing parts", ((Integer)result.get("bestRateTotalPieces")-(Integer)result.get("bestRatePieces"))));
     	this.pieQuantity.setData(quantityData);
-    	
-    	
+ 
     }
     
     @FXML
@@ -128,9 +124,6 @@ public class BestRateController {
         //Sliders
         this.txtProbability.textProperty().bind(Bindings.format("%.2f%%",this.bestRateSliderProbability.valueProperty()));
         this.txtPercentage.textProperty().bind(Bindings.format("%.2f%%",this.bestRateSliderPercentage.valueProperty()));        
-        //Pie charts
-//        this.pieParts.setLegendVisible(true);
-//        this.pieQuantity.setLegendVisible(true);
     }
     
     @FXML

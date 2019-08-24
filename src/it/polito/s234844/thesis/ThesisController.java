@@ -34,8 +34,8 @@ import javafx.util.Callback;
 
 public class ThesisController {
 	
-	final String error = "-fx-border-color: red; -fx-border-width: 2px;";
-	final String noError ="-fx-border-color: none;";
+	private final String error = "-fx-border-color: red; -fx-border-width: 2px;";
+	private final String noError ="-fx-border-color: none;";
 	
 	ThesisModel model;
 	Stage primaryStage;
@@ -194,7 +194,22 @@ public class ThesisController {
     
     @FXML
     void handleSimulation(ActionEvent event) {
-
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polito/s234844/thesis/Simulation.fxml"));
+    	BorderPane simulationPane;
+		try {
+			simulationPane = loader.load();
+			Scene simulationScene = new Scene(simulationPane);
+//			dueDateScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+	    	this.secondaryStage = new Stage();
+	    	this.secondaryStage.setResizable(false);
+	    	this.secondaryStage.setScene(simulationScene);
+	    	this.secondaryStage.setTitle("DUE DATE TOOL by Fabio Mazzocco");
+	    	this.primaryStage.hide();
+	    	this.secondaryStage.show();
+	    	((SimulationController)loader.getController()).setOrder(this, this.model, this.orderMap, this.datePicker.getValue());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
     
     @FXML
