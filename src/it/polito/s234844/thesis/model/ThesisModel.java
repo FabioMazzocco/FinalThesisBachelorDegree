@@ -315,7 +315,7 @@ public class ThesisModel {
 	 * @param percentageOfParts is the {@link Double} value that represent the percentage of the total quantity that must be issued
 	 * @return a {@link String} with the result
 	 */
-	public HashMap<String, Object> bestRate(HashMap<String, Integer> orderMap, LocalDate orderDate, Double probability, Double percentageOfParts) {
+	public HashMap<String, Object> bestRate(HashMap<String, Integer> orderMap, Double probability, Double percentageOfParts) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		this.errors="";
 		
@@ -326,12 +326,9 @@ public class ThesisModel {
 			result.put("errors", this.errors);
 			return result;
 		}
-			
-		//If no date was chosen or (even if isn't allowed) it's in the past --> the date considered is today
-		if(orderDate == null || orderDate.isBefore(LocalDate.now()))
-			orderDate = LocalDate.now();
+		
 		//The probability can't be outside the interval between 0 and 1 (excluded) 
-		if(probability<=0 || probability>=1) {
+		if(probability<=0.0 || probability>=1.0) {
 			result.put("list", null);
 			result.put("errors", "Ops! The chosen probability should be between 0% and 100% (excluded)");
 			return result;
@@ -374,6 +371,10 @@ public class ThesisModel {
 		this.lastProbability = probability;
 		
 		result.put("list", this.bestRateList);
+		result.put("bestRate", this.bestRate);
+		result.put("bestRatePieces", this.quantity(this.bestRateList, orderMap));
+		result.put("bestRateTotalPieces", totalQuantity);
+		result.put("bestRateDays", this.daysPartial(this.bestRateList, probability));
 		result.put("errors", this.errors);
 		return result;
 	}
