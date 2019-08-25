@@ -85,7 +85,7 @@
                         <Label fx:id="txtParallelProduction" disable="true" text="Parallel" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.valignment="CENTER" />
                      </children>
                   </GridPane>
-                  <Button fx:id="btnCalculate" mnemonicParsing="false" onAction="#handleDueDateQuotation" text="Calculate" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                  <Button fx:id="btnCalculate" defaultButton="true" mnemonicParsing="false" onAction="#handleDueDateQuotation" text="Calculate" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Button>

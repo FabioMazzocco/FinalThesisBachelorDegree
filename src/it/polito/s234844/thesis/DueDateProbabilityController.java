@@ -93,8 +93,11 @@ public class DueDateProbabilityController {
 
     @FXML
     void initialize() {
-        assert dueDatePicker != null : "fx:id=\"dueDatePicker\" was not injected: check your FXML file 'DueDateProbability.fxml'.";
+    	assert dueDatePicker != null : "fx:id=\"dueDatePicker\" was not injected: check your FXML file 'DueDateProbability.fxml'.";
         assert btnCalculate != null : "fx:id=\"btnCalculate\" was not injected: check your FXML file 'DueDateProbability.fxml'.";
+        assert btnSerialParallelProduction != null : "fx:id=\"btnSerialParallelProduction\" was not injected: check your FXML file 'DueDateProbability.fxml'.";
+        assert txtSerialProduction != null : "fx:id=\"txtSerialProduction\" was not injected: check your FXML file 'DueDateProbability.fxml'.";
+        assert txtParallelProduction != null : "fx:id=\"txtParallelProduction\" was not injected: check your FXML file 'DueDateProbability.fxml'.";
         assert txtProbability != null : "fx:id=\"txtProbability\" was not injected: check your FXML file 'DueDateProbability.fxml'.";
         assert dueDateProbabilityChart != null : "fx:id=\"dueDateProbabilityChart\" was not injected: check your FXML file 'DueDateProbability.fxml'.";
         assert btnHome != null : "fx:id=\"btnHome\" was not injected: check your FXML file 'DueDateProbability.fxml'.";

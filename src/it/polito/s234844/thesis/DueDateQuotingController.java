@@ -128,9 +128,17 @@ public class DueDateQuotingController {
     
     @FXML
     void initialize() {
-        assert dueDateQuotingSlider != null : "fx:id=\"dueDateQuotingSlider\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
-        assert btnSerialParallelProduction != null : "fx:id=\"btnSerialParallelProduction\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
-        assert dueDateQuotingChart != null : "fx:id=\"dueDateQuotingChart\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
+    	 assert dueDateQuotingTop != null : "fx:id=\"dueDateQuotingTop\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
+         assert dueDateQuotingSlider != null : "fx:id=\"dueDateQuotingSlider\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
+         assert txtProbability != null : "fx:id=\"txtProbability\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
+         assert txtSerialProduction != null : "fx:id=\"txtSerialProduction\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
+         assert btnSerialParallelProduction != null : "fx:id=\"btnSerialParallelProduction\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
+         assert txtParallelProduction != null : "fx:id=\"txtParallelProduction\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
+         assert btnCalculate != null : "fx:id=\"btnCalculate\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
+         assert txtDays != null : "fx:id=\"txtDays\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
+         assert txtDate != null : "fx:id=\"txtDate\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
+         assert dueDateQuotingChart != null : "fx:id=\"dueDateQuotingChart\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
+         assert btnHome != null : "fx:id=\"btnHome\" was not injected: check your FXML file 'DueDateQuoting.fxml'.";
         
         //Top bar
         this.dueDateQuotingTop.setStyle("-fx-background-color: rgb(33, 215, 243);");

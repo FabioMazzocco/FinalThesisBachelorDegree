@@ -19,6 +19,7 @@ public class Simulator {
 	private Map<String, Part> partsMap;
 	private List<Order> orders;
 	private List<Order> newOrder;
+	private Integer maxWaitingDays;
 	private PriorityQueue<Order> queue;
 	private List<Line> lines;
 	private Random rand;
@@ -33,6 +34,7 @@ public class Simulator {
 	private int actualQuantity;
 	private int inTimeOrders;
 	private int inStockOrders;
+	private int lostOrders;
 	private LocalDate orderStart;
 	private LocalDate orderEnd;
 	private Duration totalIdleness;
@@ -44,6 +46,7 @@ public class Simulator {
 		this.partsMap = new HashMap<String, Part>();
 		this.orders = new ArrayList<Order>();
 		this.newOrder = new ArrayList<Order>();
+		this.maxWaitingDays = null;
 		this.queue = new PriorityQueue<Order>();
 		this.lines = new ArrayList<Line>();
 		this.rand = new Random();
@@ -60,13 +63,15 @@ public class Simulator {
 	 * @param newOrder is the{@link List} of the selected (new) orders
 	 * @param simultaneousParts is the number of parts that can be produced/treated simultaneously
 	 */
-	public void init(LocalDate simulationStart, LocalDate simulationEnd, Map<String, Part> partsMap, List<Order> orders, List<Order> newOrder, int simultaneousParts) {
+	public void init(LocalDate simulationStart, LocalDate simulationEnd, Map<String, Part> partsMap, List<Order> orders, List<Order> newOrder, int simultaneousParts,
+			Integer maxWaitingDays) {
 		//General variables
 		this.simulationStart = simulationStart;
 		this.simulationEnd = simulationEnd;
 		this.partsMap = partsMap;
 		this.orders = orders;
 		this.newOrder = newOrder;
+		this.maxWaitingDays = maxWaitingDays;
 		this.orders.addAll(this.newOrder);
 		this.updateOrders();
 		this.queue.addAll(orders);
@@ -85,6 +90,7 @@ public class Simulator {
 		this.actualQuantity = 0;
 		this.inTimeOrders = 0;
 		this.inStockOrders = 0;
+		this.lostOrders = 0;
 		this.orderStart = LocalDate.MIN;
 		this.orderEnd = LocalDate.MAX;
 		this.totalIdleness = Duration.ofDays(0);
@@ -106,6 +112,11 @@ public class Simulator {
 			//Choose of the line (first free one or max idleness one)
 			Line line = this.findLine(o);
 			
+			//If the days between the receiving date and the current one is higher than the max days that an order can wait --> lost order
+			if(this.maxWaitingDays!=null && o.getOrder_date().plusDays((long)this.maxWaitingDays).isBefore(this.currentDate)){
+				this.lostOrders++;
+				continue;
+			}
 			
 			//If the current date is after the chosen end for the simulation --> the simulation stops (some order may have not been processed)
 			//It is done now because the findLine() method updates the current date (in case no line is currently free --> there's the need
@@ -228,33 +239,30 @@ public class Simulator {
 	}
 	
 	/**
-	 * Generates the {@link String} with the result
-	 * @return the result {@link String}
+	 * Generates the {@link HashMap} with the result
+	 * @return the {@link HashMap}<{@link String}, {@link Object}> result (String = index, object = number/String/LocalDate)
 	 */
-	public String getResult() {
+	public HashMap<String, Object> getResult() {
 		this.freeLines();
 		
 		for(Line l : this.lines)
 			this.totalIdleness = this.totalIdleness.plus(l.getIdleness());
 		
-		String result = "\n\n\n -------- SIMULATION FROM " + this.simulationStart.format(this.italian) +" TO "+
-						this.simulationEnd.format(this.italian) + " COMPLETED ---------\n";
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		result.put("actualOrders", this.actualOrders);
+		result.put("totalOrders", this.totalOrders);
+		result.put("actualQuantity", this.actualQuantity);
+		result.put("totalQuantity", this.totalQuantity);
+		result.put("inTimeOrders", this.inTimeOrders);
+		result.put("inStockOrders", this.inStockOrders);
+		result.put("lostOrders", this.lostOrders);
+		result.put("orderStart", this.orderStart);
+		result.put("orderEnd", this.orderEnd);
+		result.put("newOrder", this.newOrder);
+// 		if(this.orderStart.equals(LocalDate.MIN))
+//			result += "The order wasn't started during the selected period\n";
+		result.put("totalIdleness", this.totalIdleness.toDays());
 		
-		result += String.format("%d out of %d orders treated (%.2f%%)\n", this.actualOrders, this.totalOrders, 100*(double)this.actualOrders/this.totalOrders);
-		
-		result += String .format("%d out of %d pieces treated (%.2f%%)\n", this.actualQuantity, this.totalQuantity, 100*(double)this.actualQuantity/this.totalQuantity);
-		
-		result += this.inTimeOrders +" orders started the day when the order was received\n";
-		result += this.inStockOrders +" orders satisfied with the stock\n";
- 		if(this.orderStart.equals(LocalDate.MIN))
-			result += "The order wasn't started during the selected period\n";
-		else {
-			result += "The order started on "+ this.orderStart.format(this.italian) + " and ended on " +
-						this.orderEnd.format(this.italian) + "\n";
-			if(this.newOrder.size()>0)
-				result += "The following parts of the order were not produced: "+ this.newOrder + "\n";
-		}
-		result += "The total idleness of the system was "+ this.totalIdleness.toDays() +" days\n";
 		return result;
 	}
 }

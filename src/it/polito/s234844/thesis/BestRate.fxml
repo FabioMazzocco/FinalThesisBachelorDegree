@@ -68,7 +68,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="btnBestRate" mnemonicParsing="false" onAction="#handleBestRateCalculation" text="Best rate" GridPane.halignment="CENTER">
+                  <Button fx:id="btnBestRate" defaultButton="true" mnemonicParsing="false" onAction="#handleBestRateCalculation" text="Best rate" GridPane.halignment="CENTER">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -141,7 +141,7 @@
                </VBox.margin>
                <children>
                   <PieChart fx:id="pieParts" labelsVisible="true" legendVisible="true" prefHeight="30.0" prefWidth="30.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-                  <PieChart fx:id="pieQuantity" labelsVisible="true" legendVisible="true" prefHeight="30.0" prefWidth="30.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" GridPane.columnIndex="1" />
+                  <PieChart fx:id="pieQuantity" labelsVisible="true" legendVisible="true" prefHeight="30.0" prefWidth="30.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                </children>
                <padding>
                   <Insets top="20.0" />

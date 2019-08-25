@@ -82,6 +82,18 @@ public class ThesisController {
     
     @FXML
     private DatePicker datePicker;
+    
+    @FXML
+    private Button btnDueDateQuoting;
+
+    @FXML
+    private Button btnDueDateProbability;
+
+    @FXML
+    private Button btnBestRate;
+
+    @FXML
+    private Button btnSimulation;
 
     
     
@@ -234,11 +246,18 @@ public class ThesisController {
     
     @FXML
     void initialize() {
+    	assert topBar != null : "fx:id=\"topBar\" was not injected: check your FXML file 'Thesis.fxml'.";
         assert cbParts != null : "fx:id=\"cbParts\" was not injected: check your FXML file 'Thesis.fxml'.";
         assert txtQuantity != null : "fx:id=\"txtQuantity\" was not injected: check your FXML file 'Thesis.fxml'.";
         assert btnAddPart != null : "fx:id=\"btnAddPart\" was not injected: check your FXML file 'Thesis.fxml'.";
         assert partsList != null : "fx:id=\"partsList\" was not injected: check your FXML file 'Thesis.fxml'.";
+        assert btnReset != null : "fx:id=\"btnReset\" was not injected: check your FXML file 'Thesis.fxml'.";
+        assert datePicker != null : "fx:id=\"datePicker\" was not injected: check your FXML file 'Thesis.fxml'.";
         assert grid != null : "fx:id=\"grid\" was not injected: check your FXML file 'Thesis.fxml'.";
+        assert btnDueDateQuoting != null : "fx:id=\"btnDueDateQuoting\" was not injected: check your FXML file 'Thesis.fxml'.";
+        assert btnDueDateProbability != null : "fx:id=\"btnDueDateProbability\" was not injected: check your FXML file 'Thesis.fxml'.";
+        assert btnBestRate != null : "fx:id=\"btnBestRate\" was not injected: check your FXML file 'Thesis.fxml'.";
+        assert btnSimulation != null : "fx:id=\"btnSimulation\" was not injected: check your FXML file 'Thesis.fxml'.";
         this.btnAddPart.setDefaultButton(true);
         this.btnReset.setAlignment(Pos.CENTER_RIGHT);
         this.datePicker.setShowWeekNumbers(true);
@@ -268,6 +287,11 @@ public class ThesisController {
     		this.grid.setDisable(true);
     	else
     		this.grid.setDisable(false);
+    	
+    	if(this.partsList.getItems().size()>1)
+    		this.btnBestRate.setDisable(false);
+    	else
+    		this.btnBestRate.setDisable(true);
     }
     
     @FXML

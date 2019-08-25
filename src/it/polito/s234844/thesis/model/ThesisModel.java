@@ -436,7 +436,7 @@ public class ThesisModel {
 
 	
 	/**
-	 * Calculates the quantity of tbe current solution to check if the #pieces is bigger or equals the minimum quantity
+	 * Calculates the quantity of the current solution to check if the #pieces is bigger or equals the minimum quantity
 	 */
 	private int quantity(List<Part> partial, HashMap<String, Integer> orderMap) {
 		int quantity = 0;
@@ -461,25 +461,39 @@ public class ThesisModel {
 	
 	
 	
-	public String simulate(LocalDate orderDate, HashMap<String, Integer> orderMap, Integer parallelParts, LocalDate start, LocalDate end, int yearsBefore) {
-		String result="";
+	public HashMap<String, Object> simulate(LocalDate orderDate, HashMap<String, Integer> orderMap, Integer parallelParts, LocalDate start, LocalDate end, int yearBefore,
+			Integer maxWaitingDays) {
+		this.errors = "";
+		HashMap<String, Object> result = new HashMap<String, Object>();
 		
 		this.checkInput(orderMap, false);
-		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0)
-			return this.errors;
+		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0) {
+			result.put("errors", this.errors);
+			return result;
+		}
+		
 		//Dates check
 		if(start == null || start.isBefore(LocalDate.now()))
 			start = LocalDate.now();
-		if(end == null || end.isBefore(start))
-			return "Ops! The end date of the simulation must be equal or after the start date (today if no start date is selected)";
-		if(orderDate.isAfter(end))
-			return "Ops! The order date must be before the simulation ending date";
+		if(end == null || end.isBefore(start)){
+			result.put("errors", "Ops! The end date of the simulation must be equal or after the start date (today if no start date is selected)");
+			return result;
+		}
+		if(orderDate.isAfter(end)) {
+			result.put("errors", "Ops! The order date must be before the simulation ending date");
+			return result;
+		}
 		//Useless if there're no parts selected
-		if(orderMap.size() < 1)
-			return "Please select at least one product to make the simulation possible";
+		if(orderMap.size() < 1) {
+			result.put("errors", "Please select at least one product to make the simulation possible");
+			return result;
+		}
 		//Check on the number of parallel parts that can be produced
-		if(parallelParts<1)
-			return "Ops! Choose a valid number of contemporary producible parts";
+		if(parallelParts<1) {
+			result.put("errors", "Ops! Choose a valid number of contemporary producible parts");
+			return result;
+		}
+			
 		
 		//From Map to orders
 		List<Order> newOrder = new ArrayList<Order>();
@@ -489,12 +503,13 @@ public class ThesisModel {
 		}
 		
 		this.simulator = new Simulator();
-		this.simulator.init(start, end, partsMap, this.getOrdersBetweenDates(start, end, yearsBefore), newOrder, parallelParts);
+		this.simulator.init(start, end, partsMap, this.getOrdersBetweenDates(start, end, yearBefore), newOrder, parallelParts, maxWaitingDays);
 		this.simulator.run();
 		
-		result = this.simulator.getResult();
+		result.putAll(this.simulator.getResult());
+		result.put("errors", this.errors);
 		
-		return result+errors;
+		return result;
 	}
 	
 	/**
@@ -503,10 +518,10 @@ public class ThesisModel {
 	 * @param end is the {@link LocalDate} in which the simulation ends
 	 * @return the {@link List} of {@link Order}s that started between the two dates
 	 */
-	private List<Order> getOrdersBetweenDates(LocalDate start, LocalDate end, int yearsBefore){
+	private List<Order> getOrdersBetweenDates(LocalDate start, LocalDate end, int yearBefore){
 		List<Order> orders = new ArrayList<Order>();
 		
-		LocalDate[] simDates = checkSimulationDates(start, end, yearsBefore);
+		LocalDate[] simDates = checkSimulationDates(start, end, yearBefore);
 		start = simDates[0];
 		end = simDates[1];
 		
@@ -524,14 +539,14 @@ public class ThesisModel {
 	 * Checks if the starting and ending simulation dates are in between the MIN_YEAR and the MAX_YEAR (set depending on the existing data of the DB)
 	 * @param start is the {@link LocalDate} in which the simulation starts
 	 * @param end is the {@link LocalDate} in which the simulation ends
-	 * @param yearsBefore is the number of years to be subtracted to the starting and ending date to get the data for the simulation
+	 * @param yearBefore is the number of years to be subtracted to the starting and ending date to get the data for the simulation
 	 * @return an {@link array} of {@link LocalDate}s in which array[0] is the starting date and array[1] is the ending date (both dates are adjusted)
 	 */
-	private LocalDate[] checkSimulationDates(LocalDate start, LocalDate end, int yearsBefore) {
+	private LocalDate[] checkSimulationDates(LocalDate start, LocalDate end, int yearBefore) {
 		LocalDate[] date = new LocalDate[2];
 		
-		start = start.minusYears(yearsBefore);
-		end = end.minusYears(yearsBefore);
+		start = start.withYear(yearBefore);
+		end = end.withYear(yearBefore);
 		
 		//The data are from 2012 to 2019 (incomplete) --> data before 2012 or after 2018 would be zero or very few
 		//This years can be updated with the variables MIN_YEAR and MAX_YEAR (it is done automatically with the data in the DB)

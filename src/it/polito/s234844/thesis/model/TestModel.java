@@ -30,9 +30,9 @@ public class TestModel {
 		orderMap.put(model.getPartsList().get(20).getPart_number(), 274);
 		orderMap.put(model.getPartsList().get(5).getPart_number(), 600);
 		
-		System.out.println("\n\n" + model.dueDateQuoting(orderMap,LocalDate.of(2019, 5, 20), 0.7, false));
+//		System.out.println("\n\n" + model.dueDateQuoting(orderMap,LocalDate.of(2019, 5, 20), 0.7, false));
 		
-		System.out.println("\n\n"+model.dueDateProbability(orderMap, LocalDate.now(), LocalDate.now().plusDays(17), false));
+//		System.out.println("\n\n"+model.dueDateProbability(orderMap, LocalDate.now(), LocalDate.now().plusDays(17), false));
 		
 		
 		//Best rate
@@ -41,7 +41,9 @@ public class TestModel {
 		
 		
 		//Simulation
-		System.out.println(model.simulate(LocalDate.now().plusDays(5), orderMap, 10, LocalDate.now(), LocalDate.now().plusDays(7), 3));
+		HashMap<String, Object> result = model.simulate(LocalDate.now().plusDays(5), orderMap, 10, LocalDate.now().plusDays(25), LocalDate.now().plusDays(20), 2018, 15);
+		for(String s : result.keySet())
+			System.out.println(s+" --- "+result.get(s));
 	}
 
 }

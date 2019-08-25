@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -13,12 +14,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="it.polito.s234844.thesis.SimulationController">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.s234844.thesis.SimulationController">
    <top>
       <Pane fx:id="simulationTop" prefHeight="60.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="140.0" layoutY="13.0" text="DUE DATE TOOL">
+            <Label layoutX="141.0" layoutY="13.0" text="DUE DATE TOOL">
                <font>
                   <Font name="System Bold" size="23.0" />
                </font>
@@ -34,9 +34,9 @@
          <children>
             <GridPane>
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="120.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="10.0" prefWidth="70.0" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
@@ -48,13 +48,13 @@
                         <Insets right="15.0" />
                      </padding>
                   </Label>
-                  <DatePicker fx:id="simulationStartDate" onAction="#manageEndDate" prefWidth="120.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <DatePicker fx:id="simulationStartDate" maxWidth="100.0" minWidth="100.0" onAction="#manageEndDate" prefWidth="100.0" promptText="--/--/----" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                   <Label text="End" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                      <padding>
                         <Insets right="15.0" />
                      </padding>
                   </Label>
-                  <DatePicker fx:id="simulationEndDate" disable="true" prefWidth="120.0" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                  <DatePicker fx:id="simulationEndDate" disable="true" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" promptText="--/--/----" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                </children>
             </GridPane>
             <GridPane>
@@ -76,9 +76,58 @@
                         <Insets right="15.0" />
                      </GridPane.margin>
                   </Label>
-                  <ComboBox fx:id="cbYear" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
-                  <Button fx:id="btnSimulate" mnemonicParsing="false" onAction="#handleSimulation" text="Simulate" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+                  <ComboBox fx:id="cbYear" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="CENTER" />
+                  <Label text="Lines" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                     <padding>
+                        <Insets right="15.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="txtLines" promptText="#lines" GridPane.columnIndex="3" />
                </children>
+            </GridPane>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="10.0" prefWidth="70.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="100.0" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+               <children>
+                  <Label text="Max waiting days" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+                     <padding>
+                        <Insets right="15.0" />
+                     </padding>
+                  </Label>
+                  <TextField fx:id="txtWaitingDays" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" promptText="#days" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="CENTER">
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
+                  </TextField>
+               </children>
+            </GridPane>
+            <GridPane>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="btnSimulate" defaultButton="true" mnemonicParsing="false" onAction="#handleSimulation" prefHeight="22.0" prefWidth="420.0" text="Simulate" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Button>
+               </children>
+               <VBox.margin>
+                  <Insets top="20.0" />
+               </VBox.margin>
+               <columnConstraints>
+                  <ColumnConstraints />
+                  <ColumnConstraints />
+               </columnConstraints>
             </GridPane>
             <GridPane>
               <columnConstraints>
