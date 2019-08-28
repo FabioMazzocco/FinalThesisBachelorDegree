@@ -68,13 +68,14 @@ public class Simulator {
 		//General variables
 		this.simulationStart = simulationStart;
 		this.simulationEnd = simulationEnd;
-		this.partsMap = partsMap;
-		this.orders = orders;
-		this.newOrder = newOrder;
+		this.partsMap = new HashMap<String, Part>(partsMap);
+		this.orders = new ArrayList<Order>(orders);
+		this.newOrder = new ArrayList<Order>(newOrder);
 		this.maxWaitingDays = maxWaitingDays;
 		this.orders.addAll(this.newOrder);
 		this.updateOrders();
-		this.queue.addAll(orders);
+		this.queue = new PriorityQueue<Order>();
+		this.queue.addAll(this.orders);
 		this.lines.clear();
 		for(int i=0; i<simultaneousParts; i++) {
 			Line l = new Line(i, this.simulationStart);

@@ -465,6 +465,7 @@ public class ThesisModel {
 			Integer maxWaitingDays) {
 		this.errors = "";
 		HashMap<String, Object> result = new HashMap<String, Object>();
+		result.put("errors", this.errors);
 		
 		this.checkInput(orderMap, false);
 		if(this.errors.compareTo("Ops! Please choose some products to make this tool work")==0) {
@@ -475,24 +476,18 @@ public class ThesisModel {
 		//Dates check
 		if(start == null || start.isBefore(LocalDate.now()))
 			start = LocalDate.now();
-		if(end == null || end.isBefore(start)){
+		if(end == null || end.isBefore(start))
 			result.put("errors", "Ops! The end date of the simulation must be equal or after the start date (today if no start date is selected)");
-			return result;
-		}
-		if(orderDate.isAfter(end)) {
+		if(orderDate.isAfter(end))
 			result.put("errors", "Ops! The order date must be before the simulation ending date");
-			return result;
-		}
 		//Useless if there're no parts selected
-		if(orderMap.size() < 1) {
+		if(orderMap.size() < 1)
 			result.put("errors", "Please select at least one product to make the simulation possible");
-			return result;
-		}
 		//Check on the number of parallel parts that can be produced
-		if(parallelParts<1) {
+		if(parallelParts<1)
 			result.put("errors", "Ops! Choose a valid number of contemporary producible parts");
+		if(((String)result.get("errors")).compareTo("")!=0)
 			return result;
-		}
 			
 		
 		//From Map to orders
@@ -520,16 +515,22 @@ public class ThesisModel {
 	 */
 	private List<Order> getOrdersBetweenDates(LocalDate start, LocalDate end, int yearBefore){
 		List<Order> orders = new ArrayList<Order>();
-		
 		LocalDate[] simDates = checkSimulationDates(start, end, yearBefore);
 		start = simDates[0];
 		end = simDates[1];
+		System.out.println("\n\n\nINIZIO AGGIUNTA ORDINI DA "+start+" A "+end);
 		
 		for(Order order : this.ordersList) {
-			if(order.getOrder_date().isEqual(start) || order.getOrder_date().isEqual(end))
-				orders.add(order);
-			else if(order.getOrder_date().isAfter(start) && order.getOrder_date().isBefore(end))
-				orders.add(order);
+			System.out.print("Ordine "+order+" ");
+			if(order.getOrder_date().isEqual(start) || order.getOrder_date().isEqual(end)) {
+				orders.add(order.clone());
+				System.out.println("aggiunto");
+			}
+			else if(order.getOrder_date().isAfter(start) && order.getOrder_date().isBefore(end)) {
+				orders.add(order.clone());
+				System.out.println("aggiunto");
+			}
+			System.out.println();
 		}
 		
 		return orders;

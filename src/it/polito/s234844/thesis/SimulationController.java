@@ -2,12 +2,9 @@ package it.polito.s234844.thesis;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-
 import javax.swing.JOptionPane;
-
 import it.polito.s234844.thesis.model.ThesisModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +12,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Callback;
 
@@ -55,6 +55,48 @@ public class SimulationController {
 
     @FXML
     private Button btnSimulate;
+    
+    @FXML
+    private GridPane ordersQuantityGrid;
+    
+    @FXML
+    private ProgressBar barOrders;
+
+    @FXML
+    private ProgressBar barQuantity;
+
+    @FXML
+    private Label txtOrdersPercentage;
+
+    @FXML
+    private Label txtQuantityPercentage;
+
+    @FXML
+    private Label txtOrders;
+
+    @FXML
+    private Label txtQuantity;
+    
+    @FXML
+    private GridPane statisticsGrid;
+
+    @FXML
+    private Label txtStartDate;
+
+    @FXML
+    private Label txtEndDate;
+
+    @FXML
+    private Label txtLostOrders;
+
+    @FXML
+    private Label txtInStockOrders;
+
+    @FXML
+    private Label txtTotalIdleness;
+
+    @FXML
+    private Label txtNoDelayOrders;
     
     @FXML
     private Button btnHome;
@@ -110,6 +152,21 @@ public class SimulationController {
     	}
     	
     	System.out.println(result); //To be deleted
+    	
+    	//Statistical values
+    	this.ordersQuantityGrid.setDisable(false);
+    	int actualQuantity = (int)result.get("actualQuantity");
+    	int totalQuantity = (int)result.get("totalQuantity");
+    	int actualOrders = (int)result.get("actualOrders");
+    	int totalOrders = (int)result.get("totalOrders");
+    	double quantityPercentage = ((double)actualQuantity/totalQuantity)*100;
+    	double ordersPercentage = ((double)actualOrders/totalOrders)*100;
+    	this.txtQuantityPercentage.setText(String.format("%.1f%%", quantityPercentage));
+    	this.txtOrdersPercentage.setText(String.format("%.1f%%", ordersPercentage));
+    	this.barQuantity.setProgress(quantityPercentage/100);
+    	this.barOrders.setProgress(ordersPercentage/100);
+    	this.txtQuantity.setText(String.format("%d/%d pcs", actualQuantity, totalQuantity));
+    	this.txtOrders.setText(String.format("%d/%d ords", actualOrders, totalOrders));
     }
 
     @FXML
@@ -121,6 +178,20 @@ public class SimulationController {
         assert txtLines != null : "fx:id=\"txtLines\" was not injected: check your FXML file 'Simulation.fxml'.";
         assert txtWaitingDays != null : "fx:id=\"txtWaitingDays\" was not injected: check your FXML file 'Simulation.fxml'.";
         assert btnSimulate != null : "fx:id=\"btnSimulate\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert ordersQuantityGrid != null : "fx:id=\"ordersQuantityGrid\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert barOrders != null : "fx:id=\"barOrders\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert barQuantity != null : "fx:id=\"barQuantity\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert txtOrdersPercentage != null : "fx:id=\"txtOrdersPercentage\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert txtQuantityPercentage != null : "fx:id=\"txtQuantityPercentage\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert txtOrders != null : "fx:id=\"txtOrders\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert txtQuantity != null : "fx:id=\"txtQuantity\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert statisticsGrid != null : "fx:id=\"statisticsGrid\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert txtStartDate != null : "fx:id=\"txtStartDate\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert txtEndDate != null : "fx:id=\"txtEndDate\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert txtLostOrders != null : "fx:id=\"txtLostOrders\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert txtInStockOrders != null : "fx:id=\"txtInStockOrders\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert txtTotalIdleness != null : "fx:id=\"txtTotalIdleness\" was not injected: check your FXML file 'Simulation.fxml'.";
+        assert txtNoDelayOrders != null : "fx:id=\"txtNoDelayOrders\" was not injected: check your FXML file 'Simulation.fxml'.";
         assert btnHome != null : "fx:id=\"btnHome\" was not injected: check your FXML file 'Simulation.fxml'.";
         this.simulationTop.setStyle("-fx-background-color: rgb(33, 215, 243);");
     }

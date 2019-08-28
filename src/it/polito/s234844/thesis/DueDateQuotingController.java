@@ -15,6 +15,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+import javax.swing.JOptionPane;
+
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 import javafx.beans.binding.Bindings;
@@ -103,13 +105,17 @@ public class DueDateQuotingController {
     @FXML
     void handleDueDateQuotation(ActionEvent event) {
     	HashMap<String, Object> result = this.model.dueDateQuoting(this.orderMap, this.orderDate, this.dueDateQuotingSlider.getValue()/100, this.isParallel);
-    	if(((String)result.get("errors")).compareTo("")!=0)
-    		System.out.println((String)result.get("errors"));
-    	else {
-    		this.txtDays.setText(""+(Integer) result.get("days"));
-    		this.txtDate.setText(this.orderDate.plusDays((Integer)result.get("days")).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    		this.setChart((NormalDistribution)result.get("normal"));
+    	//Errors management
+    	if(((String)result.get("errors")).compareTo("")!=0) {
+    		String errors = "THE FOLLOWING ERRORS HAVE BEEN FOUND:\n"+(String)result.get("errors");
+    		JOptionPane.showMessageDialog(null, errors,"ERRORS OCCURRED", JOptionPane.ERROR_MESSAGE);
+    		return;
     	}
+    	
+    	this.txtDays.setText(""+(Integer) result.get("days"));
+    	this.txtDate.setText(this.orderDate.plusDays((Integer)result.get("days")).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    	this.setChart((NormalDistribution)result.get("normal"));
+    	   	
     }
     
     @FXML

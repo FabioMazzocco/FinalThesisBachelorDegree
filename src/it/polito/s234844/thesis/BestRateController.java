@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
+
 import it.polito.s234844.thesis.model.Order;
 import it.polito.s234844.thesis.model.Part;
 import it.polito.s234844.thesis.model.ThesisModel;
@@ -73,9 +76,10 @@ public class BestRateController {
     void handleBestRateCalculation(ActionEvent event) {
     	HashMap<String, Object> result = this.model.bestRate(this.orderMap, this.bestRateSliderProbability.getValue()/100, this.bestRateSliderPercentage.getValue()/100);
     	
+    	//Errors management
     	if(((String)result.get("errors")).compareTo("")!=0) {
-    		//Case with errors
-    		System.out.println((String)result.get("errors"));
+    		String errors = "THE FOLLOWING ERRORS HAVE BEEN FOUND:\n"+(String)result.get("errors");
+    		JOptionPane.showMessageDialog(null, errors,"ERRORS OCCURRED", JOptionPane.ERROR_MESSAGE);
     		return;
     	}
     	

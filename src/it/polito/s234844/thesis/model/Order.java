@@ -104,5 +104,11 @@ public class Order implements Comparable<Order>{
 		return -(this.quantity - o.getQuantity());
 	}
 	
+	public Order clone() {
+		Order order = new Order(this.customer, this.part_number, this.quantity, this.description, this.good_issue_date,
+			this.order_date);
+		return order;
+	}
+	
 	
 }

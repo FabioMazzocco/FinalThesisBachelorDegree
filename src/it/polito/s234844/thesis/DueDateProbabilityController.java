@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+
+import javax.swing.JOptionPane;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.AreaChart;
@@ -64,12 +67,14 @@ public class DueDateProbabilityController {
     	if(this.dueDatePicker.getValue() == null)
     		this.dueDatePicker.setValue(this.orderDate);
     	HashMap<String, Object> result = this.thesisMmodel.dueDateProbability(this.orderMap, this.orderDate, this.dueDatePicker.getValue(), this.isParallel);
-    	if(((String) result.get("errors")).compareTo("")!=0) {
-    		//Case with errors
+    	//Errors management
+    	if(((String)result.get("errors")).compareTo("")!=0) {
+    		String errors = "THE FOLLOWING ERRORS HAVE BEEN FOUND:\n"+(String)result.get("errors");
+    		JOptionPane.showMessageDialog(null, errors,"ERRORS OCCURRED", JOptionPane.ERROR_MESSAGE);
+    		return;
     	}
-    	else {
-    		this.txtProbability.setText(String.format("%.2f%%", (Double)result.get("probability")*100));
-    	}
+    	
+    	this.txtProbability.setText(String.format("%.2f%%", (Double)result.get("probability")*100));
     }
     
     @FXML
