@@ -1,14 +1,12 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{amsmath}
 \usepackage{graphicx} 
+\usepackage{amsfonts}
+\usepackage{textcomp }
+\usepackage{float}
 \begin{document}
 
 %FRONTESPIZIO
-%\title{POLITECNICO DI TORINO}
-%\begin{figure}
-%\centering
-%\includegraphics[width=4cm]{polito-logo.png}
-%\end{figure}
 \include{frontespizio}
 
 \title{Statistical due date for customers satisfaction }
@@ -27,11 +25,11 @@ The due date quoting of an order is one the most difficult problems to deal with
 
 \subsection{Management engineering relevance of the problem}
 
-The order management is very important to minimize the delay of the deliveries and to have a decent service level in order to satisfy the customer expectations and increase the brand image. Being able to evaluate due dates means to have the ability to know if the production of important/urgent parts should be escalated or outsourcing is needed. During periods with orders pick, it is crucial to know which parts should be produced first in order to provide the customer the highest quantity of parts in the shortest time and to choose the best mix from this point of view. Carrying out simulations of the acceptance of an order during a certain period let the company decide whether or not accept the order and if it is necessary to fix a larger due date.
+The order management is very important to minimize the delay of the deliveries and to have a decent service level in order to satisfy the customer expectations and increase the brand image. Being able to evaluate due dates means to have the ability to know if the production of important/urgent parts should be escalated or outsourcing is needed. During periods with orders pick, it is crucial to know which parts should be produced first in order to provide the customer the highest quantity of parts in the shortest time and to choose the best mix from this point of view. Carrying out simulations of the acceptance of an order during a certain period let the company decide whether to accept the order and if it is necessary to fix a larger due date.
 
 \subsection{Data-set description for the analysis}
 
-The data-set has been provided by the company I did my internship with and it has been anonymized. It is made of one table with the following columns: customer, part-number, quantity, description, good-issue-date and order-date. Each value is the line of an order and represents the need for a specific part, whereas an order can be made of many lines. The "order-date" does not indicate when the order was received but it is the date in which its production started. It is important to notice that the quantity is not relevant for the production time (once the production starts, it only depends on other factors and the whole quantity is produced all together). When "order-date" and "good-issue-date" are the same value, it means that the requested part was already in stock.
+The data-set has been provided by the company I did my internship with and it has been anonymized. It is made of one table with the following columns: customer, part-number, quantity, description, good-issue-date, and order-date. Each value is the line of an order and represents the need for a specific part, whereas an order can be made of many lines. The "order-date" does not indicate when the order was received but it is the date in which its production started. It is important to notice that the quantity is not relevant for the production time (once the production starts, it only depends on other factors and the whole quantity is produced all together). When "order-date" and "good-issue-date" are the same value, it means that the requested part was already in stock.
 
 \subsection{Preliminary description of the implemented algorithms}
 
@@ -39,7 +37,7 @@ Due date quoting (from "Programmazione e gestione della produzione" classes) is 
 
 \subsection{Preliminary description of the software functions} 
 
-The user is able to choose the parts and the relative quantities demanded: this is the order. Through the due date quoting it is possible to choose a probability and the suggested due date is shown based on the parts statistical distributions. It is also possible to set a due date and check the relative probability using the inverse due date quoting algorithm. These two functionalities are available both for the parallel production of the parts and the serial one. In case of production picks, it is possible to calculate the best parts mix to be produced/issued at first in order to maximize the quantity/days rate setting the probability and the minimum quantity of parts to be delivered (this can be useful if lines can be issued before the full completion of the order). In the end, it is possible to simulate the behavior of the order in a certain period regulating the number of parts that can be produced simultaneously (due date quoting is applied with a random probability to the single parts in order to determine the random number of days of each one).
+The user can choose the parts and the relative quantities demanded: this is the order. Through the due date quoting it is possible to choose a probability and the suggested due date is shown based on the parts statistical distributions. It is also possible to set a due date and check the relative probability using the inverse due date quoting algorithm. These two functionalities are available both for the parallel production of the parts and the serial one. In case of production picks, it is possible to calculate the best parts mix to be produced/issued at first in order to maximize the quantity/days rate setting the probability and the minimum quantity of parts to be delivered (this can be useful if lines can be issued before the full completion of the order). In the end, it is possible to simulate the behavior of the order in a certain period regulating the number of parts that can be produced simultaneously (due date quoting is applied with a random probability to the single parts in order to determine the random number of days of each one).
 
 \newpage
 %2 PROBLEMA AFFRONTATO: Descrizione dettagliata del problema affrontato (partendo dal contesto operativo/aziendale, delineare il sotto-problema scelto, evidenziandone input, output, criticit\`a, potenzialit\`a, e rilevanza) 
@@ -79,9 +77,16 @@ Due to lack of further data, the simulation uses each line as an order (which is
 \section{Software data structures and algorithms}
 
 \subsection{A statistical approach: the due date quotation}
-From the analysis of a sample of items, the random variables can be considered normally distributed, in fact, the normality test usually has a p-value less than 0,05. Clearly, most of the times, there should be some negative values that represent a negative number of days, but this is not possible, so the negative random outcomes indicate that the requested item is already present in stock. Since we can consider the items normally distributed, it is easy to calculate the mean and variance of a group of variables:
+From the analysis of a sample of items, the random variables can be considered normally distributed, in fact, the normality test usually has a p-value less than 0,005.\\
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=12cm]{Normality_test}
+		\caption{Example of normality test run with Minitab\textcopyright}
+	\end{center}
+\end{figure}
+ Clearly, most of the times, there should be some negative values that represent a negative number of days, but this is not possible, so the negative random outcomes indicate that the requested item is already present in stock. Since we can consider the items normally distributed, it is easy to calculate the mean and variance of a group of variables: the sum of two or more random variables that are normally distributed, is normally distributed as well:
 \begin{equation*}
-\mu = \sum_{i} \mu_{i} 		 \qquad \qquad \qquad \qquad \qquad \qquad 			\sigma = \sqrt{\sum_{i} \sigma_{i}^{2}}
+X \sim \mathbb{N}(\mu, \sigma)		\qquad \qquad where \qquad \qquad		\mu = \sum_{i} \mu_{i} 		 \qquad and\qquad			\sigma = \sqrt{\sum_{i} \sigma_{i}^{2}}
 \end{equation*}
 The standard deviation does not consider the covariance, the random variables are assumed independent because there is not enough information to be sure of a correlation, also, there are few items that share sub-components so, it can be considered negligible: this is a simplification. \\
 
@@ -89,7 +94,7 @@ By using the "Normal distribution"\footnote{https://commons.apache.org/proper/co
 The same is done to find the cumulative probability of a certain date: the number of days is turned into a continuous value by adding less than 0.5 (maximum of the chances, see note) and the cumulative probability is obtained with the "cumulativeProbability(double x)" method.
 
 \subsection{Best rate algorithm}
- uses the recursion: all the combinations are tried, and the best result is shown. Starting from one item of the order, each other combination (without repetitions) is tried and, if the mix is within the constraints, the rate is calculated by using the due date quoting algorithm for days. If the rate is greater than the past rate, it becomes the new best rate. The recursive method calls itself adding an item until the termination conditions become true, this way it considers all the possibilities.Since all the combinations are tried, the number of part-numbers is relevant, it is possible to obtain good computational times if the number of items is less than ten (10! =  3628800 cycles multiplied by all the operations of each one). 
+This function uses the recursion: all the combinations are tried, and the best result is shown. Starting from one item of the order, each other combination (without repetitions) is tried and, if the mix is within the constraints, the rate is calculated by using the due date quoting algorithm (see paragraph 4.1) for days. If the rate is greater, it becomes the new best rate. The recursive method calls itself adding an item until the termination conditions become true, then it deletes an item and tries agiain with another one, this way it considers all the possibilities.Since all the combinations are tried, the number of items is relevant, it is possible to obtain good computational times if the number of items is less than ten (10! =  3628800 cycles multiplied by all the operations of each one). 
 
 \subsection{Simulation algorithm}
  This is a discrete-event simulation: the orders from the selected year are added to a PriorityQueue\footnote{https://docs.oracle.com/javase/8/docs/api/java/util/PriorityQueue.html}, so are the items of the given order. All the dates have the same year, i.e. the simulation start year. The Line objects are created, and the simulation starts: the less recent order is selected, the order date becomes the "current date" and a free line is chosen; in case of many free lines, the one with the greater idleness is picked; in case no line is free, the first one that is freed is picked and the "current day" changes to the first day of availability of the line. This way, all the orders are processed until the current date exceeds the simulation ending date or all the orders are treated. In the meantime, the statistics are updated in accordance with the happened event.
