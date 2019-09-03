@@ -493,7 +493,7 @@ public class ThesisModel {
 		//From Map to orders
 		List<Order> newOrder = new ArrayList<Order>();
 		for(String s : orderMap.keySet()) {
-			Order o = new Order(null, s, orderMap.get(s), null, null, orderDate);
+			Order o = new Order(null, s, orderMap.get(s), this.partsMap.get(s).getDescription(), null, orderDate);
 			newOrder.add(o);
 		}
 		

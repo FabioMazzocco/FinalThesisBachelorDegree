@@ -260,8 +260,6 @@ public class Simulator {
 		result.put("orderStart", this.orderStart);
 		result.put("orderEnd", this.orderEnd);
 		result.put("newOrder", this.newOrder);
-// 		if(this.orderStart.equals(LocalDate.MIN))
-//			result += "The order wasn't started during the selected period\n";
 		result.put("totalIdleness", this.totalIdleness.toDays());
 		
 		return result;

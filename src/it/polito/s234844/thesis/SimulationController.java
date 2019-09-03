@@ -2,9 +2,13 @@ package it.polito.s234844.thesis;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import javax.swing.JOptionPane;
+
+import it.polito.s234844.thesis.model.Order;
 import it.polito.s234844.thesis.model.ThesisModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +17,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -99,6 +104,9 @@ public class SimulationController {
     private Label txtNoDelayOrders;
     
     @FXML
+    private ListView<Order> listView;
+    
+    @FXML
     private Button btnHome;
 
     @FXML
@@ -153,6 +161,10 @@ public class SimulationController {
     	
     	System.out.println(result); //To be deleted
     	
+    	this.listView.setPrefHeight(0);
+    	this.listView.setVisible(false);
+    	this.listView.getItems().clear();
+    	
     	//Statistical values
     	this.ordersQuantityGrid.setDisable(false);
     	int actualQuantity = (int)result.get("actualQuantity");
@@ -167,6 +179,28 @@ public class SimulationController {
     	this.barOrders.setProgress(ordersPercentage/100);
     	this.txtQuantity.setText(String.format("%d/%d pcs", actualQuantity, totalQuantity));
     	this.txtOrders.setText(String.format("%d/%d ords", actualOrders, totalOrders));
+    	LocalDate start = (LocalDate)result.get("orderStart");
+    	LocalDate end = (LocalDate)result.get("orderEnd");
+    	if(start.equals(LocalDate.MIN)) {
+    		this.txtStartDate.setText("Never started");
+    		this.txtEndDate.setText("Never started");
+    	}
+    	else {
+    		this.txtStartDate.setText(start.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    		this.txtEndDate.setText(end.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    	}
+    	this.txtLostOrders.setText(""+(int)result.get("lostOrders")+" ord");
+    	this.txtInStockOrders.setText(""+(int)result.get("inStockOrders")+" ord");
+    	this.txtTotalIdleness.setText(""+(long)result.get("totalIdleness")+" days");
+    	this.txtNoDelayOrders.setText((int)result.get("inTimeOrders")+" ord");
+    	@SuppressWarnings("unchecked")
+		ArrayList<Order> missingParts = new ArrayList<Order>((ArrayList<Order>)result.get("newOrder"));
+    	if(missingParts.size()!=0) {
+    		this.listView.setPrefHeight(100);
+    		this.listView.getItems().addAll(missingParts);
+    		this.listView.setVisible(true);
+    	}
+    	
     }
 
     @FXML
@@ -194,6 +228,7 @@ public class SimulationController {
         assert txtNoDelayOrders != null : "fx:id=\"txtNoDelayOrders\" was not injected: check your FXML file 'Simulation.fxml'.";
         assert btnHome != null : "fx:id=\"btnHome\" was not injected: check your FXML file 'Simulation.fxml'.";
         this.simulationTop.setStyle("-fx-background-color: rgb(33, 215, 243);");
+        this.listView.setPrefHeight(0);
     }
 
 	public void setOrder(ThesisController home, ThesisModel model, HashMap<String, Integer> orderMap, LocalDate orderDate) {
