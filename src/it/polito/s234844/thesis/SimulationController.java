@@ -62,6 +62,18 @@ public class SimulationController {
     private Button btnSimulate;
     
     @FXML
+    private Label txtStartDate;
+
+    @FXML
+    private Label txtEndDate;
+    
+    @FXML
+    private Label txtNonProducedParts;
+    
+    @FXML
+    private ListView<Order> listView;
+    
+    @FXML
     private GridPane ordersQuantityGrid;
     
     @FXML
@@ -86,12 +98,6 @@ public class SimulationController {
     private GridPane statisticsGrid;
 
     @FXML
-    private Label txtStartDate;
-
-    @FXML
-    private Label txtEndDate;
-
-    @FXML
     private Label txtLostOrders;
 
     @FXML
@@ -103,8 +109,6 @@ public class SimulationController {
     @FXML
     private Label txtNoDelayOrders;
     
-    @FXML
-    private ListView<Order> listView;
     
     @FXML
     private Button btnHome;
@@ -161,6 +165,7 @@ public class SimulationController {
     	
     	System.out.println(result); //To be deleted
     	
+    	this.txtNonProducedParts.setVisible(false);
     	this.listView.setPrefHeight(0);
     	this.listView.setVisible(false);
     	this.listView.getItems().clear();
@@ -178,14 +183,18 @@ public class SimulationController {
     	this.barQuantity.setProgress(quantityPercentage/100);
     	this.barOrders.setProgress(ordersPercentage/100);
     	this.txtQuantity.setText(String.format("%d/%d pcs", actualQuantity, totalQuantity));
-    	this.txtOrders.setText(String.format("%d/%d ords", actualOrders, totalOrders));
+    	this.txtOrders.setText(String.format("%d/%d ord", actualOrders, totalOrders));
     	LocalDate start = (LocalDate)result.get("orderStart");
     	LocalDate end = (LocalDate)result.get("orderEnd");
     	if(start.equals(LocalDate.MIN)) {
     		this.txtStartDate.setText("Never started");
+    		this.txtStartDate.setStyle("-fx-font-style: italic; ");
     		this.txtEndDate.setText("Never started");
+    		this.txtEndDate.setStyle("-fx-font-style: italic; ");
     	}
     	else {
+    		this.txtStartDate.setStyle("-fx-font-style: normal");
+    		this.txtEndDate.setStyle("-fx-font-style: normal");
     		this.txtStartDate.setText(start.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     		this.txtEndDate.setText(end.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	}
@@ -196,7 +205,10 @@ public class SimulationController {
     	@SuppressWarnings("unchecked")
 		ArrayList<Order> missingParts = new ArrayList<Order>((ArrayList<Order>)result.get("newOrder"));
     	if(missingParts.size()!=0) {
-    		this.listView.setPrefHeight(100);
+    		this.txtNonProducedParts.setVisible(true);
+    		this.listView.setPrefHeight(30*missingParts.size());
+    		if(this.listView.getPrefHeight()>100)
+    			this.listView.setPrefHeight(100);
     		this.listView.getItems().addAll(missingParts);
     		this.listView.setVisible(true);
     	}
@@ -228,6 +240,7 @@ public class SimulationController {
         assert txtNoDelayOrders != null : "fx:id=\"txtNoDelayOrders\" was not injected: check your FXML file 'Simulation.fxml'.";
         assert btnHome != null : "fx:id=\"btnHome\" was not injected: check your FXML file 'Simulation.fxml'.";
         this.simulationTop.setStyle("-fx-background-color: rgb(33, 215, 243);");
+        this.txtNonProducedParts.setVisible(false);
         this.listView.setPrefHeight(0);
     }
 
