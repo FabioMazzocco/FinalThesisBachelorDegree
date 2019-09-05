@@ -16,7 +16,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.StackedBarChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
@@ -63,10 +66,10 @@ public class BestRateController {
     private Text txtDays;
     
     @FXML
-    private PieChart pieParts;
+    private StackedBarChart<CategoryAxis, NumberAxis> barParts;
 
     @FXML
-    private PieChart pieQuantity;
+    private StackedBarChart<CategoryAxis, NumberAxis> barQuantity;
     
     @FXML
     private Button btnHome;
@@ -96,16 +99,22 @@ public class BestRateController {
     	this.txtBestRate.setText(String.format("%.2f", result.get("bestRate")));
     	this.txtDays.setText(String.format("%d", result.get("bestRateDays")));
     	
-    	//Pie charts
-    	ObservableList<PieChart.Data> partsData = FXCollections.observableArrayList(
-    			new PieChart.Data("Produced quantity", this.listView.getItems().size())	,
-    			new PieChart.Data("Missing quantity", this.orderMap.size()-this.listView.getItems().size()));
-    	this.pieParts.setData(partsData);
+    	//Bar charts
+    	this.barParts.setVisible(true);
+        this.barQuantity.setVisible(true);
+        CategoryAxis partsX = new CategoryAxis();
+        partsX.setLabel("Parts");
+        NumberAxis partsY = new NumberAxis();
+        this.barParts = new StackedBarChart(partsX, partsY);
+    	ObservableList<StackedBarChart.Data> partsData = FXCollections.observableArrayList(
+    			new StackedBarChart.Data("Produced quantity", this.listView.getItems().size())	,
+    			new StackedBarChart.Data("Missing quantity", this.orderMap.size()-this.listView.getItems().size()));
+//    	this.barParts.setData(partsData);
     	
-    	ObservableList<PieChart.Data> quantityData = FXCollections.observableArrayList(
-    			new PieChart.Data("Produced parts", (Integer)result.get("bestRatePieces")),
-    			new PieChart.Data("Missing parts", ((Integer)result.get("bestRateTotalPieces")-(Integer)result.get("bestRatePieces"))));
-    	this.pieQuantity.setData(quantityData);
+    	ObservableList<StackedBarChart.Data> quantityData = FXCollections.observableArrayList(
+    			new StackedBarChart.Data("Produced parts", (Integer)result.get("bestRatePieces")),
+    			new StackedBarChart.Data("Missing parts", ((Integer)result.get("bestRateTotalPieces")-(Integer)result.get("bestRatePieces"))));
+//    	this.barQuantity.setData(quantityData);
  
     }
     
@@ -119,15 +128,22 @@ public class BestRateController {
         assert listView != null : "fx:id=\"listView\" was not injected: check your FXML file 'BestRate.fxml'.";
         assert txtBestRate != null : "fx:id=\"txtBestRate\" was not injected: check your FXML file 'BestRate.fxml'.";
         assert txtDays != null : "fx:id=\"txtDays\" was not injected: check your FXML file 'BestRate.fxml'.";
-        assert pieParts != null : "fx:id=\"pieParts\" was not injected: check your FXML file 'BestRate.fxml'.";
-        assert pieQuantity != null : "fx:id=\"pieQuantity\" was not injected: check your FXML file 'BestRate.fxml'.";
+        assert barParts != null : "fx:id=\"barParts\" was not injected: check your FXML file 'BestRate.fxml'.";
+        assert barQuantity != null : "fx:id=\"barQuantity\" was not injected: check your FXML file 'BestRate.fxml'.";
         assert btnHome != null : "fx:id=\"btnHome\" was not injected: check your FXML file 'BestRate.fxml'.";
         assert bestRateTop != null : "fx:id=\"bestRateTop\" was not injected: check your FXML file 'BestRate.fxml'.";
         //Top
         this.bestRateTop.setStyle("-fx-background-color: rgb(33, 215, 243);");
         //Sliders
         this.txtProbability.textProperty().bind(Bindings.format("%.2f%%",this.bestRateSliderProbability.valueProperty()));
-        this.txtPercentage.textProperty().bind(Bindings.format("%.2f%%",this.bestRateSliderPercentage.valueProperty()));        
+        this.txtPercentage.textProperty().bind(Bindings.format("%.2f%%",this.bestRateSliderPercentage.valueProperty()));     
+        //Bar
+        this.barParts.setVisible(false);
+        this.barQuantity.setVisible(false);
+        this.barParts.getXAxis().setVisible(false);
+        this.barQuantity.getXAxis().setVisible(false);
+        this.barParts.getYAxis().setVisible(false);
+        this.barQuantity.getYAxis().setVisible(false);
     }
     
     @FXML
