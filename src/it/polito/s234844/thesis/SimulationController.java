@@ -22,6 +22,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 public class SimulationController {
@@ -42,6 +43,9 @@ public class SimulationController {
 
     @FXML
     private Pane simulationTop;
+    
+    @FXML
+    private VBox vboxMain;
 
     @FXML
     private DatePicker simulationStartDate;

@@ -193,7 +193,7 @@ public class ThesisController {
 			Scene bestRateScene = new Scene(bestRatePane);
 //			dueDateScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 	    	this.secondaryStage = new Stage();
-//	    	this.secondaryStage.setResizable(false);
+	    	this.secondaryStage.setResizable(false);
 	    	this.secondaryStage.setScene(bestRateScene);
 	    	this.secondaryStage.setTitle("DUE DATE TOOL by Fabio Mazzocco");
 	    	this.primaryStage.hide();

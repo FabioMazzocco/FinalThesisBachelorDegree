@@ -1,6 +1,7 @@
 package it.polito.s234844.thesis;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,14 +13,21 @@ import it.polito.s234844.thesis.model.Order;
 import it.polito.s234844.thesis.model.Part;
 import it.polito.s234844.thesis.model.ThesisModel;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.chart.Axis;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
@@ -102,20 +110,29 @@ public class BestRateController {
     	//Bar charts
     	this.barParts.setVisible(true);
         this.barQuantity.setVisible(true);
-        CategoryAxis partsX = new CategoryAxis();
-        partsX.setLabel("Parts");
-        NumberAxis partsY = new NumberAxis();
-        this.barParts = new StackedBarChart(partsX, partsY);
-    	ObservableList<StackedBarChart.Data> partsData = FXCollections.observableArrayList(
-    			new StackedBarChart.Data("Produced quantity", this.listView.getItems().size())	,
-    			new StackedBarChart.Data("Missing quantity", this.orderMap.size()-this.listView.getItems().size()));
-//    	this.barParts.setData(partsData);
-    	
-    	ObservableList<StackedBarChart.Data> quantityData = FXCollections.observableArrayList(
-    			new StackedBarChart.Data("Produced parts", (Integer)result.get("bestRatePieces")),
-    			new StackedBarChart.Data("Missing parts", ((Integer)result.get("bestRateTotalPieces")-(Integer)result.get("bestRatePieces"))));
-//    	this.barQuantity.setData(quantityData);
- 
+        
+        XYChart.Series quantityData1 = new XYChart.Series();
+        XYChart.Data producedQty = new XYChart.Data("Produced quantity", (int)result.get("bestRatePieces"));
+        quantityData1.getData().add(producedQty);
+        XYChart.Series quantityData2 = new XYChart.Series();
+        XYChart.Data missingQty = new XYChart.Data("Produced quantity", ((int)result.get("bestRateTotalPieces")-(int)result.get("bestRatePieces")));
+        quantityData2.getData().add(missingQty);
+        
+        
+        this.barQuantity.getData().clear();
+        this.barQuantity.layout();
+    	this.barQuantity.getData().add(quantityData1);
+    	this.barQuantity.getData().add(quantityData2);
+        
+    	XYChart.Series partsData1 = new XYChart.Series();
+        partsData1.getData().add(new XYChart.Data("Produced parts", this.listView.getItems().size()));
+        XYChart.Series partsData2 = new XYChart.Series();
+        partsData2.getData().add(new XYChart.Data("Produced parts", this.orderMap.size()-this.listView.getItems().size()));
+       
+        this.barParts.getData().clear();
+        this.barParts.layout();
+    	this.barParts.getData().add(partsData1);
+    	this.barParts.getData().add(partsData2);
     }
     
     @FXML
@@ -138,12 +155,17 @@ public class BestRateController {
         this.txtProbability.textProperty().bind(Bindings.format("%.2f%%",this.bestRateSliderProbability.valueProperty()));
         this.txtPercentage.textProperty().bind(Bindings.format("%.2f%%",this.bestRateSliderPercentage.valueProperty()));     
         //Bar
+//        this.barQuantity.setTitle("Produced quantity");
         this.barParts.setVisible(false);
         this.barQuantity.setVisible(false);
         this.barParts.getXAxis().setVisible(false);
         this.barQuantity.getXAxis().setVisible(false);
         this.barParts.getYAxis().setVisible(false);
         this.barQuantity.getYAxis().setVisible(false);
+        this.barParts.getYAxis().setOpacity(0);
+        this.barParts.getXAxis().setOpacity(0);
+        this.barQuantity.getYAxis().setOpacity(0);
+        this.barQuantity.getXAxis().setOpacity(0);
     }
     
     @FXML
@@ -156,4 +178,5 @@ public class BestRateController {
     	this.model = model;
     	this.orderMap = orderMap;
     }
+    
 }
