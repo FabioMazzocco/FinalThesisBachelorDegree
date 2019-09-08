@@ -39,7 +39,7 @@ public class TestModel {
 		
 		
 		//Simulation
-		HashMap<String, Object> result = model.simulate(LocalDate.now().plusDays(5), orderMap, 10, LocalDate.now().plusDays(25), LocalDate.now().plusDays(20), 2018, 15);
+		HashMap<String, Object> result = model.simulate(LocalDate.now().plusDays(5), orderMap, 10, LocalDate.now().plusDays(25), LocalDate.now().plusDays(20), 2018, 15, null);
 		for(String s : result.keySet())
 			System.out.println(s+" --- "+result.get(s));
 	}

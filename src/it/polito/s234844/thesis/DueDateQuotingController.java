@@ -30,7 +30,6 @@ public class DueDateQuotingController {
 	private ThesisController home;
 	private HashMap<String, Integer> orderMap;
 	private LocalDate orderDate;
-//	private HashMap<String, Part> partsMap;
 	private boolean isParallel;
 	
 	private final String bold = "-fx-font-weight: bold;";
@@ -78,10 +77,34 @@ public class DueDateQuotingController {
     public DueDateQuotingController() {
     	this.model = null;
     	this.orderMap = null;
-//    	this.partsMap = null;
     	this.isParallel = false;
     }
     
+    /**
+     * Due date quotation
+     * @param event
+     */
+    @FXML
+    void handleDueDateQuotation(ActionEvent event) {
+    	HashMap<String, Object> result = this.model.dueDateQuoting(this.orderMap, this.orderDate, this.dueDateQuotingSlider.getValue()/100, this.isParallel);
+    	
+    	//Errors management
+    	if(((String)result.get("errors")).compareTo("")!=0) {
+    		String errors = "THE FOLLOWING ERRORS HAVE BEEN FOUND:\n"+(String)result.get("errors");
+    		JOptionPane.showMessageDialog(null, errors,"ERRORS OCCURRED", JOptionPane.ERROR_MESSAGE);
+    		return;
+    	}
+    	
+    	//Text&chart update
+    	this.txtDays.setText(""+(Integer) result.get("days"));
+    	this.txtDate.setText(this.orderDate.plusDays((Integer)result.get("days")).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    	this.setChart((NormalDistribution)result.get("normal"));
+    }
+    
+    /**
+     * Handling of the switch between serial and parallel production
+     * @param event
+     */
     @FXML
     void handleSerialParallelProduction(ActionEvent event) {
     	if(this.isParallel) {
@@ -101,23 +124,6 @@ public class DueDateQuotingController {
     	}
     }
 
-    
-    @FXML
-    void handleDueDateQuotation(ActionEvent event) {
-    	HashMap<String, Object> result = this.model.dueDateQuoting(this.orderMap, this.orderDate, this.dueDateQuotingSlider.getValue()/100, this.isParallel);
-    	//Errors management
-    	if(((String)result.get("errors")).compareTo("")!=0) {
-    		String errors = "THE FOLLOWING ERRORS HAVE BEEN FOUND:\n"+(String)result.get("errors");
-    		JOptionPane.showMessageDialog(null, errors,"ERRORS OCCURRED", JOptionPane.ERROR_MESSAGE);
-    		return;
-    	}
-    	
-    	this.txtDays.setText(""+(Integer) result.get("days"));
-    	this.txtDate.setText(this.orderDate.plusDays((Integer)result.get("days")).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	this.setChart((NormalDistribution)result.get("normal"));
-    	   	
-    }
-    
     @FXML
     void changeProbability(ActionEvent event) {
     	try {
@@ -177,6 +183,10 @@ public class DueDateQuotingController {
 		this.orderDate = orderDate;
 	}
 	
+	/**
+	 * Set the chart data
+	 * @param normal
+	 */
 	public void setChart(NormalDistribution normal) {		
 		this.dueDateQuotingChart.getData().clear();
 		

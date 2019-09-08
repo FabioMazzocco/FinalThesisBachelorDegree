@@ -143,7 +143,6 @@ public class ThesisController {
     	this.cbParts.setValue(null);
     }
    
-
     @FXML
     void handleDueDateQuoting(ActionEvent event){
     	FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/polito/s234844/thesis/DueDateQuoting.fxml"));
@@ -224,6 +223,9 @@ public class ThesisController {
 		}
     }
     
+    /**
+     * Deletes the selected line of the order with the DELETE or BACK-SPACE key
+     */
     @FXML
     void deleteLine(KeyEvent event) {
     	if (event.getCode() == KeyCode.BACK_SPACE || event.getCode() == KeyCode.DELETE) {
@@ -268,10 +270,14 @@ public class ThesisController {
     	this.grid.setDisable(true);
     	this.primaryStage = primaryStage;
     	this.model = model;
+    	//Tell the model to load the data in the DB and populate the ComboBox with the item list
     	this.model.loadData();
     	this.cbParts.getItems().addAll(this.model.getPartsList());
     }
     
+    /**
+     * Clear all
+     */
     @FXML
     void resetList(ActionEvent event) {
     	this.orderMap.clear();
@@ -282,6 +288,9 @@ public class ThesisController {
     	this.txtQuantity.clear();
     }
     
+    /**
+     * Manage the home by disabling the buttons when there are still parameters to be set
+     */
     private void manageGrid() {
     	if(this.orderMap.size()==0 || this.datePicker.getValue() == null || this.datePicker.getValue().isBefore(LocalDate.now()))
     		this.grid.setDisable(true);
@@ -294,6 +303,9 @@ public class ThesisController {
     		this.btnBestRate.setDisable(true);
     }
     
+    /**
+     * Checks if the date is not older than today (can't accept orders for the past)
+     */
     @FXML
     void checkDateValidity(ActionEvent event) {
     	if(this.datePicker.getValue()!=null && this.datePicker.getValue().isBefore(LocalDate.now()))
@@ -301,7 +313,7 @@ public class ThesisController {
     	this.manageGrid();
     }
     
-    // Factory to create Cell of DatePicker
+    // Factory to create Cell of DatePicker -- disable the past date cells
     public Callback<DatePicker, DateCell> getDayCellFactory() {
  
         final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
@@ -325,7 +337,9 @@ public class ThesisController {
         return dayCellFactory;
     }
 
-
+    /**
+     * Hide the scene and shows the home back 
+     */
 	public void returnToPrimary() {
 		this.secondaryStage.hide();
 		this.secondaryStage.close();

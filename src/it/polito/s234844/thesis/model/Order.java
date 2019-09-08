@@ -1,7 +1,6 @@
 package it.polito.s234844.thesis.model;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class Order implements Comparable<Order>{
 	

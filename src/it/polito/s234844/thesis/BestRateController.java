@@ -1,7 +1,6 @@
 package it.polito.s234844.thesis;
 
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,19 +12,10 @@ import it.polito.s234844.thesis.model.Order;
 import it.polito.s234844.thesis.model.Part;
 import it.polito.s234844.thesis.model.ThesisModel;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.chart.Axis;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -117,7 +107,6 @@ public class BestRateController {
         XYChart.Series quantityData2 = new XYChart.Series();
         XYChart.Data missingQty = new XYChart.Data("Produced quantity", ((int)result.get("bestRateTotalPieces")-(int)result.get("bestRatePieces")));
         quantityData2.getData().add(missingQty);
-        
         
         this.barQuantity.getData().clear();
         this.barQuantity.layout();

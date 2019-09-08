@@ -1,7 +1,6 @@
 package it.polito.s234844.thesis.model;
 
 import java.util.List;
-import java.time.LocalDate;
 import org.apache.commons.math3.distribution.NormalDistribution;
 
 public class DueDateCalculator {

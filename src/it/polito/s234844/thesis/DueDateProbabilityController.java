@@ -66,6 +66,7 @@ public class DueDateProbabilityController {
     void handleDueDateProability(ActionEvent event) {
     	if(this.dueDatePicker.getValue() == null)
     		this.dueDatePicker.setValue(this.orderDate);
+    	//Due date probability
     	HashMap<String, Object> result = this.thesisMmodel.dueDateProbability(this.orderMap, this.orderDate, this.dueDatePicker.getValue(), this.isParallel);
     	//Errors management
     	if(((String)result.get("errors")).compareTo("")!=0) {
@@ -77,6 +78,9 @@ public class DueDateProbabilityController {
     	this.txtProbability.setText(String.format("%.2f%%", (Double)result.get("probability")*100));
     }
     
+    /**
+     * Handling the switch between Serial and parallel production
+     */
     @FXML
     void handleSerialParallelProduction(ActionEvent event) {
     	if(this.isParallel) {
@@ -108,6 +112,7 @@ public class DueDateProbabilityController {
         assert btnHome != null : "fx:id=\"btnHome\" was not injected: check your FXML file 'DueDateProbability.fxml'.";
         assert dueDateProbabilityTop != null : "fx:id=\"dueDateProbabilityTop\" was not injected: check your FXML file 'DueDateProbability.fxml'.";
         this.dueDateProbabilityTop.setStyle("-fx-background-color: rgb(33, 215, 243);");
+        //Disables all the dates before the order date (probability: 0)
         this.dueDatePicker.setDayCellFactory(getDayCellFactory());
         this.dueDatePicker.setStyle("-fx-text-align: center;");
         this.btnHome.setStyle("-fx-font-weight: bold");

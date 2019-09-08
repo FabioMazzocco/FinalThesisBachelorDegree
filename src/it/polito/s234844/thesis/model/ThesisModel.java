@@ -145,7 +145,9 @@ public class ThesisModel {
 		return customersList;
 	}
 	
-	
+	/**
+	 * Load the most and least recent year present in the database
+	 */
 	private void loadMinMaxYears() {
 		int[] minMaxYears = this.dao.loadMinMaxYear();
 		
@@ -177,13 +179,13 @@ public class ThesisModel {
 
 
 	/**
-	 * Due Date Quoting based on the order parts list, the order date and the given probability to estimate the due date based on the mean and the variance of the 
+	 * Due Date Quoting based on the order map (part-number, quantity), the order date and the given probability to estimate the due date based on the mean and the variance of the 
 	 * past production times
 	 * @param orderMap is the {@link HashMap} of the order (chosen by the user)
 	 * @param orderDate is the {@link LocalDate} in which the order has been received (null if no date was chosen --> today)
 	 * @param probability is the {@link Double} value which represents the probability requested for the searched date to clear the given order
 	 * @param isParallel is {@code true} if the parts can be processed in parallel, {@code false} else
-	 * @return 
+	 * @return the {@link HashMap}<{@link String}, {@link Object}> in which every object is identified by its name in the keySet, the objects are strings, lists, Integers
 	 */
 	public HashMap<String, Object> dueDateQuoting(HashMap<String, Integer> orderMap, LocalDate orderDate, Double probability, boolean isParallel) {
 		
@@ -230,13 +232,13 @@ public class ThesisModel {
 	
 	
 	/**
-	 * The probability of a given date of being the upper limit of the production of the selected order (P[ X <= x])
-	 * @param partsNumber is the {@link List} of {@link Part}s of the order (chosen by the user)
+	 * The probability of a given date of being the upper limit of the production of the selected order (P[X <= x])
+	 * @param orderMap is the {@link HashMap} with the part-number({@link String}) and the quantity ({@link Integer}) of the order (chosen by the user)
 	 * @param orderDate is the {@link LocalDate} in which the order has been received (null if no date was chosen --> today)
 	 * @param requestedDate is the {@link LocalDate} in which the order should be cleared, it is the date of which the user wants to know the probability of being
+	 * @param isParallel is the {@link Boolean} value that indicates if the production of the parts is simultaneous
 	 * the good issue date
-	 * @param parallelParts is the number
-	 * @return a {@link String} with the result of the analysis and/or the occurred errors
+	 * @return a {@link HashMap}<{@link String}, {@link Object}> with the result of the analysis and/or the occurred errors 
 	 */
 	public HashMap<String, Object> dueDateProbability(HashMap<String, Integer> orderMap, LocalDate orderDate, LocalDate requestedDate, boolean isParallel) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
@@ -280,8 +282,8 @@ public class ThesisModel {
 	/**
 	 * Checks if the partsNumber string list contains existing parts, if it contains any part, if the chosen orderDate is valid (not null or in the past).
 	 * It also checks if the number of parts that can be produced simultaneously is a valid number
-	 * @param partsNumber is the {@link List} of {@link String} of the part-numbers of the chosen goods
-	 * @param orderDate is the {@link LocalDate} in which the order is received
+	 * @param orderMap is the {@link HashMap} with the part-number({@link String}) and the quantity ({@link Integer}) of the order (chosen by the user)
+	 * @param isParallel is the {@link Boolean} value that indicates if the production of the parts is simultaneous
 	 * @return the {@link List} of {@link Part}s object from the string list and creates a errors message if needed
 	 */
 	private List<Part> checkInput(HashMap<String, Integer> orderMap, boolean isParallel){
@@ -320,10 +322,9 @@ public class ThesisModel {
 	 * allows the user to find the best compromise specifying what probability to produce the parts (that affects the #days) there must be and which
 	 * percentage of the total pieces of the order must be produced and cleared. This method is the recursion manager.
 	 * @param orderMap is a {@link HashMap} with the part-number and its quantity
-	 * @param orderDate is a {@link LocalDate} that represents the day of the order
 	 * @param probability is a {@link Double} value that indicates the probability required in the production of the parts
 	 * @param percentageOfParts is the {@link Double} value that represent the percentage of the total quantity that must be issued
-	 * @return a {@link String} with the result
+	 * @return a {@link HashMap} with the result (best rate, list of parts, produced quantity&parts)
 	 */
 	public HashMap<String, Object> bestRate(HashMap<String, Integer> orderMap, Double probability, Double percentageOfParts) {
 		HashMap<String, Object> result = new HashMap<String, Object>();
@@ -460,9 +461,21 @@ public class ThesisModel {
 	/* ======================================================================================================================================== */
 	
 	
-	
+	/**
+	 * Simulate the performance of the production of the order in a given period with some defined parameters.
+	 * @param orderDate is the {@link LocalDate} in which the order has been received (null if no date was chosen --> today)
+	 * @param orderMap is a {@link HashMap} with the part-number and its quantity
+	 * @param parallelParts is the {@link Integer} of pats that can be produced simultaneously
+	 * @param start is the {@link LocalDate} in which the simulation starts
+	 * @param end is the {@link LocalDate} in which the simulation ends
+	 * @param yearBefore is the year ({@link Integer}) considered for taking the orders of the simulation
+	 * @param maxWaitingDays is the max number ({@link Integer} of days that the item can wait the production, if exceeded it becomes a lost order. Null if is unset
+	 * @param simulationsNumber is the number ({@link Integer}) of simulations to be run, null if it is just one simulation
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
 	public HashMap<String, Object> simulate(LocalDate orderDate, HashMap<String, Integer> orderMap, Integer parallelParts, LocalDate start, LocalDate end, int yearBefore,
-			Integer maxWaitingDays) {
+			Integer maxWaitingDays, Integer simulationsNumber) {
 		this.errors = "";
 		HashMap<String, Object> result = new HashMap<String, Object>();
 		result.put("errors", this.errors);
@@ -497,14 +510,66 @@ public class ThesisModel {
 			newOrder.add(o);
 		}
 		
+		List<Order> orders = this.getOrdersBetweenDates(start, end, yearBefore);
 		this.simulator = new Simulator();
-		this.simulator.init(start, end, partsMap, this.getOrdersBetweenDates(start, end, yearBefore), newOrder, parallelParts, maxWaitingDays);
-		this.simulator.run();
 		
-		result.putAll(this.simulator.getResult());
-		result.put("errors", this.errors);
+		//Case: Single simulation
+		if(simulationsNumber == null) {
+			this.simulator.init(start, end, partsMap, orders, newOrder, parallelParts, maxWaitingDays);
+			this.simulator.run();
+			
+			result.putAll(this.simulator.getResult());
+			result.put("errors", this.errors);
+		}else { //Case: Simulation+ (more than one simulation)
+			if(simulationsNumber<=1) {
+				result.put("errors", "Please insert a valid number of simulations (>1)");
+				return result;
+			}
+			result.put("actualOrders", 0);
+			result.put("totalOrders", 0);
+			result.put("actualQuantity", 0);
+			result.put("totalQuantity", 0);
+			result.put("inTimeOrders", 0);
+			result.put("inStockOrders", 0);
+			result.put("lostOrders", 0);
+			result.put("success", 0);
+			result.put("incomplete", 0);
+			result.put("failures", 0);
+			result.put("totalIdleness", 0);
+			for(int i=0; i<simulationsNumber; i++) {
+				this.simulator = new Simulator();
+				this.simulator.init(start, end, partsMap, orders, newOrder, parallelParts, maxWaitingDays);
+				this.simulator.run();
+				HashMap<String, Object> singleSimulation = new HashMap<String, Object>(this.simulator.getResult());
+				result.put("actualOrders", (int)result.get("actualOrders") + (int) singleSimulation.get("actualOrders"));
+				result.put("totalOrders", (int)singleSimulation.get("totalOrders")); //Always the same
+				result.put("actualQuantity", (int)result.get("actualQuantity") + (int) singleSimulation.get("actualQuantity"));
+				result.put("totalQuantity", (int)singleSimulation.get("totalQuantity")); //Always the same
+				result.put("inTimeOrders", (int)result.get("inTimeOrders") + (int) singleSimulation.get("inTimeOrders"));
+				result.put("inStockOrders", (int)result.get("inStockOrders") + (int) singleSimulation.get("inStockOrders"));
+				result.put("lostOrders", (int)result.get("lostOrders") + (int) singleSimulation.get("lostOrders"));
+				if(((ArrayList<Order>)singleSimulation.get("newOrder")).size() == 0)
+					result.put("success", (int)result.get("success") + 1);
+				else if(((ArrayList<Order>)singleSimulation.get("newOrder")).size() < orderMap.size())
+					result.put("incomplete", (int)result.get("incomplete") + 1);
+				else
+					result.put("failures", (int)result.get("failures") + 1);
+				result.put("totalIdleness", (int)result.get("totalIdleness") + (int)singleSimulation.get("totalIdleness"));
+			}
+			result.put("actualOrders", (double)(int)result.get("actualOrders")/simulationsNumber);
+			result.put("actualQuantity", (double)(int)result.get("actualQuantity")/simulationsNumber);
+			result.put("inTimeOrders", (double)(int)result.get("inTimeOrders")/simulationsNumber);
+			result.put("inStockOrders", (double)(int)result.get("inStockOrders")/simulationsNumber);
+			result.put("lostOrders", (double)(int)result.get("lostOrders")/simulationsNumber);
+			result.put("success", (double)(int)result.get("success")/simulationsNumber);
+			result.put("incomplete", (double)(int)result.get("incomplete")/simulationsNumber);
+			result.put("failures", (double)(int)result.get("failures")/simulationsNumber);
+			result.put("totalIdleness", (double)(int)result.get("totalIdleness")/simulationsNumber);
+			result.put("errors", this.errors);
+		}
 		
 		return result;
+		
 	}
 	
 	/**
@@ -564,6 +629,5 @@ public class ThesisModel {
 		date[1] = end;
 		return date;
 	}
-	
 	
 }

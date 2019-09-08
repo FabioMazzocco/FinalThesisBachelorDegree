@@ -42,7 +42,7 @@ public class Simulator {
 	public Simulator() {
 		//General variables
 		this.simulationStart = LocalDate.MIN;
-		this.simulationEnd = LocalDate.MIN;
+		this.simulationEnd = LocalDate.MAX;
 		this.partsMap = new HashMap<String, Part>();
 		this.orders = new ArrayList<Order>();
 		this.newOrder = new ArrayList<Order>();
@@ -216,7 +216,7 @@ public class Simulator {
 	/**
 	 * Gives the random number of days based on the normal distribution of the {@link Part} (the random number between 0 an 1 represents
 	 * the probability of the quantile that is the #days (when converted to the respective discrete value)
-	 * @param part is the {@link Part}
+	 * @param partNumber is the {@link String} with the part number of the item
 	 * @return an {@link Integer} value that represent the random number of days
 	 */
 	private Integer randomDays(String partNumber) {
@@ -260,7 +260,7 @@ public class Simulator {
 		result.put("orderStart", this.orderStart);
 		result.put("orderEnd", this.orderEnd);
 		result.put("newOrder", this.newOrder);
-		result.put("totalIdleness", this.totalIdleness.toDays());
+		result.put("totalIdleness", (int)this.totalIdleness.toDays());
 		
 		return result;
 	}
