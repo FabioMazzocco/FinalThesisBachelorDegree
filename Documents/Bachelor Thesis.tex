@@ -55,7 +55,8 @@ The last function is probably one of the most important, it is a simulation of t
 	\item the number of "lines", how many items can be produced or treated simultaneously. This is the only method that let the company choose them and do not consider only the two extremities
 	\item the maximum number of days from the order reception to the start of production, if it takes more time, the line is lost and will not be produced
 \end{itemize}
-As well as showing the number of order processed, the tool also calculates the actual quantity percentage, the starting and ending date of the given order, the lost ones, the ones satified with the stock, the total idleness of the production lines, the orders that were started the same day they were received.
+As well as showing the number of order processed, the tool also calculates the actual quantity percentage, the starting and ending date of the given order, the lost ones, the ones satified with the stock, the total idleness of the production lines, the orders that were started the same day they were received. The simulation is random, so a single simulation is not significant to make decisions, this is the reason why "Simulation+" has been added: this section let the user simulate the period performances for a chosen number of times, the order of magnitude of the number of simulations should not exceed tens of thousands to have an answer in a adequate time, in addition, the accuracy of a simulation of this kind does not need to be the highest one, the results are pretty much the same once ten thousands simulations are run; anyway, it is possible to run more than a hundred thousands if needed.
+
 
 \newpage
 %3 DATA-SET
@@ -77,27 +78,30 @@ Due to lack of further data, the simulation uses each line as an order (which is
 \section{Software data structures and algorithms}
 
 \subsection{A statistical approach: the due date quotation}
-From the analysis of a sample of items, the random variables can be considered normally distributed, in fact, the normality test usually has a p-value less than 0,005.\\
+From the analysis of a sample of items, the random variables cannot be considered normally distributed, in fact, the normality test usually has a p-value which is less than 0,005.\\
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=12cm]{Normality_test}
 		\caption{Example of normality test run with Minitab\textcopyright}
 	\end{center}
 \end{figure}
- Clearly, most of the times, there should be some negative values that represent a negative number of days, but this is not possible, so the negative random outcomes indicate that the requested item is already present in stock. Since we can consider the items normally distributed, it is easy to calculate the mean and variance of a group of variables: the sum of two or more random variables that are normally distributed, is normally distributed as well:
+ADD REASON WHY THEY ARE NOT NORMALLY DISTRIBUTED\\
+Clearly, most of the times, there should be some negative values that represent a negative number of days, but this is not possible, so the negative random outcomes indicate that the requested item is already present in stock. Since we can consider the items normally distributed, it is easy to calculate the mean and variance of a group of variables: the sum of two or more random variables that are normally distributed, is normally distributed as well:
 \begin{equation*}
 X \sim \mathbb{N}(\mu, \sigma)		\qquad \qquad where \qquad \qquad		\mu = \sum_{i} \mu_{i} 		 \qquad and\qquad			\sigma = \sqrt{\sum_{i} \sigma_{i}^{2}}
 \end{equation*}
 The standard deviation does not consider the covariance, the random variables are assumed independent because there is not enough information to be sure of a correlation, also, there are few items that share sub-components so, it can be considered negligible: this is a simplification. \\
 
 By using the "Normal distribution"\footnote{https://commons.apache.org/proper/commons-math/apidocs/index.html} class of Apache Common Math, it is possible to obtain the p-quantile with the "inverseCumulativeProbability(double p)" method, then it is turned into a discrete value\footnote{When the decimal portion is greater than 0.5, a day is added. Another choice could have been to add a day when the decimal portion is greater then zero.} that represents the maximum number of days to issue the order with a p-probability. \\
-The same is done to find the cumulative probability of a certain date: the number of days is turned into a continuous value by adding less than 0.5 (maximum of the chances, see note) and the cumulative probability is obtained with the "cumulativeProbability(double x)" method.
+The same is done to find the cumulative probability of a certain date: the number of days is turned into a continuous value by adding less than 0.5 (maximum of the chances, see note\textsuperscript{3}) and the cumulative probability is obtained with the "cumulativeProbability(double x)" method.
 
 \subsection{Best rate algorithm}
-This function uses the recursion: all the combinations are tried, and the best result is shown. Starting from one item of the order, each other combination (without repetitions) is tried and, if the mix is within the constraints, the rate is calculated by using the due date quoting algorithm (see paragraph 4.1) for days. If the rate is greater, it becomes the new best rate. The recursive method calls itself adding an item until the termination conditions become true, then it deletes an item and tries agiain with another one, this way it considers all the possibilities.Since all the combinations are tried, the number of items is relevant, it is possible to obtain good computational times if the number of items is less than ten (10! =  3628800 cycles multiplied by all the operations of each one). 
+This function uses the recursion: all the combinations are tried, and the best result is shown. Starting from one item of the order, each other combination (without repetitions) is tried and, if the mix is within the constraints, the rate is calculated by using the due date quoting algorithm (see paragraph 4.1) for the number of production days. If the rate is greater, it becomes the new best rate. The recursive method calls itself adding an item until the termination conditions become true, then it deletes an item and tries agiain with another one, this way it considers all the possibilities.Since all the combinations are tried, the number of items is relevant, it is possible to obtain good computational times if the number of items is less than ten (10! =  3628800 cycles multiplied by all the operations of each one). \\
 
 \subsection{Simulation algorithm}
- This is a discrete-event simulation: the orders from the selected year are added to a PriorityQueue\footnote{https://docs.oracle.com/javase/8/docs/api/java/util/PriorityQueue.html}, so are the items of the given order. All the dates have the same year, i.e. the simulation start year. The Line objects are created, and the simulation starts: the less recent order is selected, the order date becomes the "current date" and a free line is chosen; in case of many free lines, the one with the greater idleness is picked; in case no line is free, the first one that is freed is picked and the "current day" changes to the first day of availability of the line. This way, all the orders are processed until the current date exceeds the simulation ending date or all the orders are treated. In the meantime, the statistics are updated in accordance with the happened event.
+ This is a discrete-event simulation: the orders from the selected year are added to a PriorityQueue\footnote{https://docs.oracle.com/javase/8/docs/api/java/util/PriorityQueue.html}, so are the items of the given order. All the dates have the same year, i.e. the simulation start year. The Line objects are created, and the simulation starts: the less recent order is selected, the order date becomes the "current date" and a free line is chosen; in case of many free lines, the one with the greater idleness is picked; in case no line is free, the first one that is freed is picked and the "current day" changes to the first day of availability of the line. This way, all the orders are processed until the current date exceeds the simulation ending date or all the orders are treated. In the meantime, the statistics are updated in accordance with the happened event. \\
+For the "Simulation+" section, the simulation algorithm is repeated for the chosen number of times and the results are added each time and, at the end, divided by the simulations number to calculate the mean values of the statistics.\\
+From the statistical side, the simulation does not lean on the due date algorithm (see paragraph 4.1), instead, all the items are considered individually because the number of production days for the part  is the outcome of a random variable, so the addition of the single random variables is no more needed, there are now numbers to be added and the random variables are set aside.
 
 \newpage
 %5 DIAGRAMMA DELLE CLASSI PRINCIPALI
@@ -114,5 +118,5 @@ Alcune videate dell’applicazione realizzata e link al video dimostrativo del s
 \section{Tests, results and final observations}
 Tabelle con risultati sperimentali ottenuti (risultati, valori, tempi, …)
 Valutazioni sui risultati ottenuti (punti di forza, punti di debolezza, contributo rispetto al problema aziendale descritto al punto 3) e conclusioni.
-
+Thanks to this tool, some main decisions can be taken, the due date quotation can be made consciously. Clearly, the software cannot consider the current status of the production so it does not differentiate the cases, it is crucial to follow the given due date but it is also important to supply the customer as fast as possible, so a further version of the tool could consider the status and use the statistical values of the production data in that situation. The "Simulation+" tool could really help in deciding because it can let the decision-maker see a real-world case of the acceptance (or the performances) of the order. Still, there could be more constraints as giving priority to some customer, the exclusion of some non-working days or public holidays, the loading of a mix of orders from the past years instead of taking them all from a single year TO BE CONTINUED
 \end{document}
