@@ -20,4 +20,5 @@
 	-fx-background-position: center;
 }
 
-
+.default-color0.chart-bar { -fx-bar-fill: #2cfe1b }
+.default-color1.chart-bar { -fx-bar-fill: #ff5733 }

@@ -14,11 +14,13 @@ import it.polito.s234844.thesis.model.ThesisModel;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.Axis;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
@@ -65,9 +67,21 @@ public class BestRateController {
     
     @FXML
     private StackedBarChart<CategoryAxis, NumberAxis> barParts;
+    
+    @FXML
+    private Text txtBarPartsLabel0;
+    
+    @FXML
+    private Text txtBarPartsLabel1;
 
     @FXML
     private StackedBarChart<CategoryAxis, NumberAxis> barQuantity;
+    
+    @FXML
+    private Text txtBarQuantityLabel0;
+    
+    @FXML
+    private Text txtBarQuantityLabel1;
     
     @FXML
     private Button btnHome;
@@ -105,23 +119,27 @@ public class BestRateController {
         XYChart.Data producedQty = new XYChart.Data("Produced quantity", (int)result.get("bestRatePieces"));
         quantityData1.getData().add(producedQty);
         XYChart.Series quantityData2 = new XYChart.Series();
-        XYChart.Data missingQty = new XYChart.Data("Produced quantity", ((int)result.get("bestRateTotalPieces")-(int)result.get("bestRatePieces")));
+        XYChart.Data missingQty = new XYChart.Data("Missing quantity", ((int)result.get("bestRateTotalPieces")-(int)result.get("bestRatePieces")));
         quantityData2.getData().add(missingQty);
         
         this.barQuantity.getData().clear();
         this.barQuantity.layout();
-    	this.barQuantity.getData().add(quantityData1);
+        this.barQuantity.getData().add(quantityData1);
     	this.barQuantity.getData().add(quantityData2);
+    	this.txtBarQuantityLabel0.setText("Produced quantity: "+(int)result.get("bestRatePieces"));
+    	this.txtBarQuantityLabel1.setText("\n\nMissing quantity: "+((int)result.get("bestRateTotalPieces")-(int)result.get("bestRatePieces")));
         
     	XYChart.Series partsData1 = new XYChart.Series();
         partsData1.getData().add(new XYChart.Data("Produced parts", this.listView.getItems().size()));
         XYChart.Series partsData2 = new XYChart.Series();
-        partsData2.getData().add(new XYChart.Data("Produced parts", this.orderMap.size()-this.listView.getItems().size()));
+        partsData2.getData().add(new XYChart.Data("Missing parts", this.orderMap.size()-this.listView.getItems().size()));
        
         this.barParts.getData().clear();
         this.barParts.layout();
     	this.barParts.getData().add(partsData1);
     	this.barParts.getData().add(partsData2);
+    	this.txtBarPartsLabel0.setText("Produced parts: " + this.listView.getItems().size());
+    	this.txtBarPartsLabel1.setText("\n\nMissing parts: " + (this.orderMap.size()-this.listView.getItems().size()));
     }
     
     @FXML
@@ -135,16 +153,20 @@ public class BestRateController {
         assert txtBestRate != null : "fx:id=\"txtBestRate\" was not injected: check your FXML file 'BestRate.fxml'.";
         assert txtDays != null : "fx:id=\"txtDays\" was not injected: check your FXML file 'BestRate.fxml'.";
         assert barParts != null : "fx:id=\"barParts\" was not injected: check your FXML file 'BestRate.fxml'.";
+        assert txtBarPartsLabel0 != null : "fx:id=\"txtBarPartsLabel0\" was not injected: check your FXML file 'BestRate.fxml'.";
+        assert txtBarPartsLabel1 != null : "fx:id=\"txtBarPartsLabel1\" was not injected: check your FXML file 'BestRate.fxml'.";
         assert barQuantity != null : "fx:id=\"barQuantity\" was not injected: check your FXML file 'BestRate.fxml'.";
+        assert txtBarQuantityLabel0 != null : "fx:id=\"txtBarQuantityLabel0\" was not injected: check your FXML file 'BestRate.fxml'.";
+        assert txtBarQuantityLabel1 != null : "fx:id=\"txtBarQuantityLabel1\" was not injected: check your FXML file 'BestRate.fxml'.";
         assert btnHome != null : "fx:id=\"btnHome\" was not injected: check your FXML file 'BestRate.fxml'.";
         assert bestRateTop != null : "fx:id=\"bestRateTop\" was not injected: check your FXML file 'BestRate.fxml'.";
+        
         //Top
         this.bestRateTop.setStyle("-fx-background-color: rgb(33, 215, 243);");
         //Sliders
         this.txtProbability.textProperty().bind(Bindings.format("%.2f%%",this.bestRateSliderProbability.valueProperty()));
         this.txtPercentage.textProperty().bind(Bindings.format("%.2f%%",this.bestRateSliderPercentage.valueProperty()));     
         //Bar
-//        this.barQuantity.setTitle("Produced quantity");
         this.barParts.setVisible(false);
         this.barQuantity.setVisible(false);
         this.barParts.getXAxis().setVisible(false);
@@ -155,6 +177,12 @@ public class BestRateController {
         this.barParts.getXAxis().setOpacity(0);
         this.barQuantity.getYAxis().setOpacity(0);
         this.barQuantity.getXAxis().setOpacity(0);
+    	this.barQuantity.getXAxis().setAutoRanging(true);
+    	this.barQuantity.getYAxis().setAutoRanging(true);
+    	this.barQuantity.setAnimated(false);
+    	this.barParts.getXAxis().setAutoRanging(true);
+    	this.barParts.getYAxis().setAutoRanging(true);
+    	this.barParts.setAnimated(false);
     }
     
     @FXML

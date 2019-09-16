@@ -372,10 +372,10 @@ public class SimulationController {
     	
     	//COMPLETE PERIOD Statistics
     	this.barOrders1.setProgress((double)result.get("actualOrders")/(int)result.get("totalOrders"));
-    	this.txtOrdersPercentage1.setText(String.format("%.1f%%", (double)result.get("actualOrders")/(int)result.get("totalOrders")));
+    	this.txtOrdersPercentage1.setText(String.format("%.1f%%", 100*(double)result.get("actualOrders")/(int)result.get("totalOrders")));
     	this.txtOrders1.setText(String.format("%.1f/%d", (double)result.get("actualOrders"), (int)result.get("totalOrders")));
     	this.barQuantity1.setProgress((double)result.get("actualQuantity")/(int)result.get("totalQuantity"));
-    	this.txtQuantityPercentage1.setText(String.format("%.1f%%", (double)result.get("actualQuantity")/(int)result.get("totalQuantity")));
+    	this.txtQuantityPercentage1.setText(String.format("%.1f%%", 100*(double)result.get("actualQuantity")/(int)result.get("totalQuantity")));
     	this.txtQuantity1.setText(String.format("%.1f/%d", (double)result.get("actualQuantity"), (int)result.get("totalQuantity")));
     	
     	this.txtLostOrders1.setText(String.format("%.1f ord", (double)result.get("lostOrders")));

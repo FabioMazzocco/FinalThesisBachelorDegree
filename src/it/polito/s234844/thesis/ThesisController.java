@@ -190,7 +190,7 @@ public class ThesisController {
 		try {
 			bestRatePane = loader.load();
 			Scene bestRateScene = new Scene(bestRatePane);
-//			dueDateScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			bestRateScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 	    	this.secondaryStage = new Stage();
 	    	this.secondaryStage.setResizable(false);
 	    	this.secondaryStage.setScene(bestRateScene);

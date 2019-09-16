@@ -1,9 +1,11 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage{amsmath}
+\usepackage{dblfloatfix} 
 \usepackage{graphicx} 
 \usepackage{amsfonts}
 \usepackage{textcomp }
 \usepackage{float}
+\usepackage[center]{caption}
 \begin{document}
 
 %FRONTESPIZIO
@@ -85,8 +87,8 @@ From the analysis of a sample of items, the random variables cannot be considere
 		\caption{Example of normality test run with Minitab\textcopyright}
 	\end{center}
 \end{figure}
-ADD REASON WHY THEY ARE NOT NORMALLY DISTRIBUTED\\
-Clearly, most of the times, there should be some negative values that represent a negative number of days, but this is not possible, so the negative random outcomes indicate that the requested item is already present in stock. Since we can consider the items normally distributed, it is easy to calculate the mean and variance of a group of variables: the sum of two or more random variables that are normally distributed, is normally distributed as well:
+The reason could be that every value below zero (e.g. stock already present some days before the order date due to forecast orders) is converted into zero so data differ from the normal distribution. Anyway, this does not prove that the data is not following a normal distribution, in fact most of the data follow the normal distribution line. A further analysis could confirm or reject this hypothesis, but, for the purpose of this thesis, they are considered normally distributed; an improved version could include the recognition of each item distribution.\\
+Since we can consider the items normally distributed, it is easy to calculate the mean and variance of a group of variables: the sum of two or more random variables that are normally distributed, is normally distributed as well:
 \begin{equation*}
 X \sim \mathbb{N}(\mu, \sigma)		\qquad \qquad where \qquad \qquad		\mu = \sum_{i} \mu_{i} 		 \qquad and\qquad			\sigma = \sqrt{\sum_{i} \sigma_{i}^{2}}
 \end{equation*}
@@ -112,6 +114,23 @@ Diagramma delle classi delle parti principali (le parti più legate alla parte a
 %6 VIDEATE E LINK YOUTUBE
 \section{Software screenshots and video}
 Alcune videate dell’applicazione realizzata e link al video dimostrativo del software
+\begin{figure}[H]
+	\centering
+   	 \includegraphics[width=6cm]{homepage}
+	\caption{Screenshot of the software's homepage}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+   	 \includegraphics[width=6cm]{bestrate}
+	\caption{Screenshot of the "Best rate" function}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+   	 \includegraphics[width=6cm]{simulationplus}
+	\caption{Screenshot of the "Simulation+" function}
+\end{figure}
 
 \newpage
 %7 TABELLE E RISULTATI SPERIMENTALI
@@ -119,4 +138,15 @@ Alcune videate dell’applicazione realizzata e link al video dimostrativo del s
 Tabelle con risultati sperimentali ottenuti (risultati, valori, tempi, …)
 Valutazioni sui risultati ottenuti (punti di forza, punti di debolezza, contributo rispetto al problema aziendale descritto al punto 3) e conclusioni.
 Thanks to this tool, some main decisions can be taken, the due date quotation can be made consciously. Clearly, the software cannot consider the current status of the production so it does not differentiate the cases, it is crucial to follow the given due date but it is also important to supply the customer as fast as possible, so a further version of the tool could consider the status and use the statistical values of the production data in that situation. The "Simulation+" tool could really help in deciding because it can let the decision-maker see a real-world case of the acceptance (or the performances) of the order. Still, there could be more constraints as giving priority to some customer, the exclusion of some non-working days or public holidays, the loading of a mix of orders from the past years instead of taking them all from a single year TO BE CONTINUED
+
+
+\newpage
+\thispagestyle{empty}
+\begin{figure*}[!b]
+	\centering
+   	 \includegraphics{creative_commons_by_nc_sa}
+	\caption*{This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA).\\Read the full copy of the license at http://creativecommons.org/licenses/by-nc-sa/4.0}
+\end{figure*}
+\vspace*{\fill}
+
 \end{document}
