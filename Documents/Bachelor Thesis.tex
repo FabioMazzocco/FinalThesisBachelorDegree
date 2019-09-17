@@ -80,11 +80,11 @@ Due to lack of further data, the simulation uses each line as an order (which is
 \section{Software data structures and algorithms}
 
 \subsection{A statistical approach: the due date quotation}
-From the analysis of a sample of items, the random variables cannot be considered normally distributed, in fact, the normality test usually has a p-value which is less than 0,005.\\
+From the analysis of a sample of items, the random variables cannot be considered normally distributed, in fact, the Anderson-Darling normality test usually has a p-value which is less than 0,005.\\
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=12cm]{Normality_test}
-		\caption{Example of normality test run with Minitab\textcopyright}
+		\caption{Example of normality test run with Minitab\textsuperscript{\textregistered}}
 	\end{center}
 \end{figure}
 The reason could be that every value below zero (e.g. stock already present some days before the order date due to forecast orders) is converted into zero so data differ from the normal distribution. Anyway, this does not prove that the data is not following a normal distribution, in fact most of the data follow the normal distribution line. A further analysis could confirm or reject this hypothesis, but, for the purpose of this thesis, they are considered normally distributed; an improved version could include the recognition of each item distribution.\\
@@ -136,8 +136,8 @@ Alcune videate dell’applicazione realizzata e link al video dimostrativo del s
 %7 TABELLE E RISULTATI SPERIMENTALI
 \section{Tests, results and final observations}
 Tabelle con risultati sperimentali ottenuti (risultati, valori, tempi, …)
-Valutazioni sui risultati ottenuti (punti di forza, punti di debolezza, contributo rispetto al problema aziendale descritto al punto 3) e conclusioni.
-Thanks to this tool, some main decisions can be taken, the due date quotation can be made consciously. Clearly, the software cannot consider the current status of the production so it does not differentiate the cases, it is crucial to follow the given due date but it is also important to supply the customer as fast as possible, so a further version of the tool could consider the status and use the statistical values of the production data in that situation. The "Simulation+" tool could really help in deciding because it can let the decision-maker see a real-world case of the acceptance (or the performances) of the order. Still, there could be more constraints as giving priority to some customer, the exclusion of some non-working days or public holidays, the loading of a mix of orders from the past years instead of taking them all from a single year TO BE CONTINUED
+Valutazioni sui risultati ottenuti (punti di forza, punti di debolezza, contributo rispetto al problema aziendale descritto al punto 3) e conclusioni.\\
+Thanks to this tool, some main decisions can be taken, the due date quotation can be made consciously. Clearly, the software cannot consider the current status of the production so it does not differentiate the cases, it is crucial to follow the given due date but it is also important to supply the customer as fast as possible, so a further version of the tool could consider the environmental status to provide a more accurate due date forecast. The "Best Rate" function is a pure decision-making tool, unless all the parts are equal under all points of view, the output is rough, some more evaluations need to be made in term of revenue and importance of the item. The "Simulation+" function could really help in deciding, the decision-maker can see a real-world case of the acceptance (or the performances) of the order in many attempts so that can see the possible outcomes and their variability, this is a the greatest contribution to the problem, it would be perfect if all the orders of that period would be already known. Still, there could be more constraints: giving priority to some customer, the exclusion of some non-working days or public holidays, the loading of a mix of orders from the past years instead of taking them all from a single year.  TO BE CONTINUED
 
 
 \newpage
