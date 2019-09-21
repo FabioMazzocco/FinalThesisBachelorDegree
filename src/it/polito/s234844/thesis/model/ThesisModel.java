@@ -226,7 +226,7 @@ public class ThesisModel {
 		
 		result.put("days", days);
 		result.put("errors",this.errors);
-		result.put("normal", this.dueDate.getNormal(parts));
+		result.put("normal", this.dueDate.getNormal());
 		return result;
 	}
 	
@@ -275,6 +275,10 @@ public class ThesisModel {
 		
 		result.put("probability", probability);
 		result.put("errors", this.errors);
+		if(isParallel)
+			result.put("normal", null);
+		else
+			result.put("normal", this.dueDate.getNormal());
 		return result;
 	}
 	

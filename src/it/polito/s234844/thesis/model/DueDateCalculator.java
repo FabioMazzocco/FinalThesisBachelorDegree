@@ -52,13 +52,18 @@ public class DueDateCalculator {
 			return -2;
 			
 		//Normal Distribution creation & #days to issue the goods (double value)
+		Part longest = null;
 		Double maxDays = 0.0;
 		for(Part part : parts) {
 			this.normal = new NormalDistribution(part.getMean(), part.getStandDev());
 			Double days = this.normal.inverseCumulativeProbability(probability);
-			if(days > maxDays)
+			if(days > maxDays) {
 				maxDays = days;
+				longest = part;
+			}
 		}
+		
+		this.normal = new NormalDistribution(longest.getMean(), longest.getStandDev());
 		
 		//Returning the #days (integer value)
 		return this.continuousToDiscrete(maxDays);
@@ -111,8 +116,8 @@ public class DueDateCalculator {
 		return totalProbability;
 	}
 	
-	public NormalDistribution getNormal(List<Part> parts) {
-		return new NormalDistribution(this.composedMean(parts), this.composedStdDev(parts));
+	public NormalDistribution getNormal() {
+		return this.normal;
 	}
 	
 	

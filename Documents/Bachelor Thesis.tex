@@ -87,7 +87,7 @@ From the analysis of a sample of items, the random variables cannot be considere
 		\caption{Example of normality test run with Minitab\textsuperscript{\textregistered}}
 	\end{center}
 \end{figure}
-The reason could be that every value below zero (e.g. stock already present some days before the order date due to forecast orders) is converted into zero so data differ from the normal distribution. Anyway, this does not prove that the data is not following a normal distribution, in fact most of the data follow the normal distribution line. A further analysis could confirm or reject this hypothesis, but, for the purpose of this thesis, they are considered normally distributed; an improved version could include the recognition of each item distribution.\\
+The reason could be that every value below zero (e.g. stock already present some days before the order date due to forecast orders) is converted into zero so data differ from the normal distribution. Anyway, this does not prove that the data is not following a normal distribution, in fact most of the data follow the days-percent line (see \textit{Figure 1}). A further analysis could confirm or reject this hypothesis, but, for the purpose of this thesis, they are considered normally distributed; an improved version could include the recognition of each item distribution.\\
 Since we can consider the items normally distributed, it is easy to calculate the mean and variance of a group of variables: the sum of two or more random variables that are normally distributed, is normally distributed as well:
 \begin{equation*}
 X \sim \mathbb{N}(\mu, \sigma)		\qquad \qquad where \qquad \qquad		\mu = \sum_{i} \mu_{i} 		 \qquad and\qquad			\sigma = \sqrt{\sum_{i} \sigma_{i}^{2}}
@@ -95,7 +95,11 @@ X \sim \mathbb{N}(\mu, \sigma)		\qquad \qquad where \qquad \qquad		\mu = \sum_{i
 The standard deviation does not consider the covariance, the random variables are assumed independent because there is not enough information to be sure of a correlation, also, there are few items that share sub-components so, it can be considered negligible: this is a simplification. \\
 
 By using the "Normal distribution"\footnote{https://commons.apache.org/proper/commons-math/apidocs/index.html} class of Apache Common Math, it is possible to obtain the p-quantile with the "inverseCumulativeProbability(double p)" method, then it is turned into a discrete value\footnote{When the decimal portion is greater than 0.5, a day is added. Another choice could have been to add a day when the decimal portion is greater then zero.} that represents the maximum number of days to issue the order with a p-probability. \\
-The same is done to find the cumulative probability of a certain date: the number of days is turned into a continuous value by adding less than 0.5 (maximum of the chances, see note\textsuperscript{3}) and the cumulative probability is obtained with the "cumulativeProbability(double x)" method.
+The same is done to find the cumulative probability of a certain date: the number of days is turned into a continuous value by adding less than 0.5 (maximum of the chances, see note\textsuperscript{3}) and the cumulative probability is obtained with the "cumulativeProbability(double x)" method. \\
+In case of parallel production: the quotation is done by considering each item alone, the largest number of days is the result; the probability is found by multiplying each probability, every item has a certain probability of being prepared by the chosen date:
+\begin{equation*}
+\mathbb{P} = \Pi_{i} \mathbb{P}_{i}
+\end{equation*}
 
 \subsection{Best rate algorithm}
 This function uses the recursion: all the combinations are tried, and the best result is shown. Starting from one item of the order, each other combination (without repetitions) is tried and, if the mix is within the constraints, the rate is calculated by using the due date quoting algorithm (see paragraph 4.1) for the number of production days. If the rate is greater, it becomes the new best rate. The recursive method calls itself adding an item until the termination conditions become true, then it deletes an item and tries agiain with another one, this way it considers all the possibilities.Since all the combinations are tried, the number of items is relevant, it is possible to obtain good computational times if the number of items is less than ten (10! =  3628800 cycles multiplied by all the operations of each one). \\
@@ -108,7 +112,14 @@ From the statistical side, the simulation does not lean on the due date algorith
 \newpage
 %5 DIAGRAMMA DELLE CLASSI PRINCIPALI
 \section{Java classes}
-Diagramma delle classi delle parti principali (le parti più legate alla parte algoritmica) dell’applicazione
+\begin{figure}[H]
+	\centering
+   	 \includegraphics[width=16cm]{classesDiagram}
+	\caption{Most important classes diagram}
+\end{figure}
+\textit{ThesisModel} is the class that manages all the requests from the user interface: connects to \textit{OrdersDAO} to load the data from the database (using the connection given by \textit{DBConnect} class); manages the requests for the due date quotation and probability thanks to hte \textit{DueDataCalculator} class; starts and runs the recursion for the "Best Rate"; connects to hte \textit{Simulator} to manage both the single simulation and the "Simulation +".\\
+The whole system works using classes that represents the parts (class \textit{Part}), the orders (class \textit{Order}), and the production lines (class \textit{Line}).\\
+In \textit{Figure 3}, there are some missing classes, most of them are from the \textit{it.polito.s234844.thesis} package which contains the controllers for the FXML files, that are the view and controller parts of the model-view-controller pattern. 
 
 \newpage
 %6 VIDEATE E LINK YOUTUBE

@@ -2,8 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.AreaChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -136,14 +135,14 @@
                   </Text>
                </children>
             </GridPane>
-            <LineChart fx:id="dueDateQuotingChart" createSymbols="false" legendVisible="false">
+            <AreaChart fx:id="dueDateQuotingChart" horizontalGridLinesVisible="false" legendVisible="false">
               <xAxis>
-                <CategoryAxis side="BOTTOM" />
+                <NumberAxis minorTickVisible="false" side="BOTTOM" tickLabelGap="4.0" tickLength="6.0" />
               </xAxis>
               <yAxis>
-                <NumberAxis side="LEFT" />
+                <NumberAxis minorTickCount="0" side="LEFT" tickLabelGap="4.0" tickLength="6.0" upperBound="0.9" />
               </yAxis>
-            </LineChart>
+            </AreaChart>
             <GridPane>
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

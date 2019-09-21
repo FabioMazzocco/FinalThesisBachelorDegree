@@ -3,7 +3,7 @@ package it.polito.s234844.thesis;
 import java.util.HashMap;
 import it.polito.s234844.thesis.model.ThesisModel;
 import javafx.fxml.FXML;
-import javafx.scene.chart.LineChart;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -69,7 +69,7 @@ public class DueDateQuotingController {
     private Text txtDate;
     
     @FXML
-    private LineChart<String, Double> dueDateQuotingChart;
+    private AreaChart<Number, Number> dueDateQuotingChart;
     
     @FXML
     private Button btnHome;
@@ -162,13 +162,7 @@ public class DueDateQuotingController {
                     this.dueDateQuotingSlider.valueProperty()
                 )
             );
-        
-        //Chart
-        this.dueDateQuotingChart.getXAxis().setTickLabelsVisible(false);
-    	this.dueDateQuotingChart.getXAxis().setTickMarkVisible(false);
-    	this.dueDateQuotingChart.getYAxis().setTickLabelsVisible(false);
-    	this.dueDateQuotingChart.getYAxis().setTickMarkVisible(false);
-    	
+ 	
     }
     
     @FXML
@@ -187,17 +181,55 @@ public class DueDateQuotingController {
 	 * Set the chart data
 	 * @param normal
 	 */
-	public void setChart(NormalDistribution normal) {		
+	public void setChart(NormalDistribution normal) {
+		//Clear all the already present data
 		this.dueDateQuotingChart.getData().clear();
 		
-        XYChart.Series<String, Double> serie= new XYChart.Series<String, Double>();
+		//Cumulative probability (till the selected data)
+		double maxProbability = this.dueDateQuotingSlider.getValue()/100;
+		if(maxProbability>0.9999)
+			maxProbability = 0.9999;
+        XYChart.Series<Number, Number> serie0 = new XYChart.Series<Number, Number>();
         
-		for(double i=0; i<normal.inverseCumulativeProbability(0.9999999)+1; i = i+0.7) {
-			XYChart.Data<String, Double> data = new XYChart.Data<String, Double>(Double.toString(i), normal.density(i));
+		for(double i=0; i<=normal.inverseCumulativeProbability(maxProbability); i = i+0.7) {
+			XYChart.Data<Number, Number> data = new XYChart.Data<Number, Number>(i, normal.cumulativeProbability(i));
 			
-			serie.getData().add(data);
+			serie0.getData().add(data);
 		}
-		this.dueDateQuotingChart.getData().add(serie);
+		XYChart.Data<Number, Number> lastData = new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), maxProbability);
+		serie0.getData().add(lastData);
+		this.dueDateQuotingChart.getData().add(serie0);
+		
+		//Cumulative probability (till 100%)
+        XYChart.Series<Number, Number> serie1 = new XYChart.Series<Number, Number>();
+        
+		for(double i=0; i<normal.inverseCumulativeProbability(0.9999); i = i+0.7) {
+			XYChart.Data<Number, Number> data = new XYChart.Data<Number, Number>(i, normal.cumulativeProbability(i));
+			
+			serie1.getData().add(data);
+		}
+		serie1.getData().add(new XYChart.Data<Number,Number>(normal.inverseCumulativeProbability(0.9999),1.0));
+		this.dueDateQuotingChart.getData().add(serie1);
+		
+		//Point
+		XYChart.Series<Number, Number> serie2 = new XYChart.Series<Number, Number>();
+		XYChart.Data<Number, Number> point = new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), maxProbability);
+		serie2.getData().add(point);
+		this.dueDateQuotingChart.getData().add(serie2);
+		
+		//Two lines
+		XYChart.Series<Number, Number> serie3 = new XYChart.Series<Number, Number>();
+		serie3.getData().add(new XYChart.Data<Number, Number>(0, maxProbability));
+		serie3.getData().add(new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), maxProbability));
+		
+		XYChart.Series<Number, Number> serie4 = new XYChart.Series<Number, Number>();
+		serie4.getData().add(new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), 0));
+		serie4.getData().add(new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), maxProbability));
+		
+		this.dueDateQuotingChart.getData().add(serie3);
+		this.dueDateQuotingChart.getData().add(serie4);
+		
+		this.dueDateQuotingChart.setAnimated(false);
 	}
 
 }

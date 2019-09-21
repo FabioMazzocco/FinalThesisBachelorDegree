@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.AreaChart?>
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
@@ -100,12 +99,12 @@
                   </Text>
                </children>
             </GridPane>
-            <AreaChart fx:id="dueDateProbabilityChart">
+            <AreaChart fx:id="dueDateProbabilityChart" horizontalGridLinesVisible="false" legendVisible="false">
               <xAxis>
-                <CategoryAxis side="BOTTOM" />
+                <NumberAxis minorTickVisible="false" side="BOTTOM" />
               </xAxis>
               <yAxis>
-                <NumberAxis side="LEFT" />
+                <NumberAxis minorTickVisible="false" side="LEFT" upperBound="1.0" />
               </yAxis>
                <VBox.margin>
                   <Insets top="20.0" />

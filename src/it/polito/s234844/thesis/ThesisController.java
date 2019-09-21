@@ -150,7 +150,7 @@ public class ThesisController {
 		try {
 			dueDatePane = loader.load();
 			Scene dueDateScene = new Scene(dueDatePane);
-//			dueDateScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			dueDateScene.getStylesheets().add(getClass().getResource("areaChart.css").toExternalForm());
 	    	this.secondaryStage = new Stage();
 	    	this.secondaryStage.setResizable(false);
 	    	this.secondaryStage.setScene(dueDateScene);
@@ -170,7 +170,7 @@ public class ThesisController {
 		try {
 			dueDatePane = loader.load();
 			Scene dueDateScene = new Scene(dueDatePane);
-//			dueDateScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			dueDateScene.getStylesheets().add(getClass().getResource("areaChart.css").toExternalForm());
 	    	this.secondaryStage = new Stage();
 	    	this.secondaryStage.setResizable(false);
 	    	this.secondaryStage.setScene(dueDateScene);
