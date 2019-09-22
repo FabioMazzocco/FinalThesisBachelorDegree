@@ -137,10 +137,10 @@
             </GridPane>
             <AreaChart fx:id="dueDateQuotingChart" horizontalGridLinesVisible="false" legendVisible="false">
               <xAxis>
-                <NumberAxis minorTickVisible="false" side="BOTTOM" tickLabelGap="4.0" tickLength="6.0" />
+                <NumberAxis label="DAYS" minorTickVisible="false" side="BOTTOM" tickLabelGap="4.0" tickLength="6.0" />
               </xAxis>
               <yAxis>
-                <NumberAxis minorTickCount="0" side="LEFT" tickLabelGap="4.0" tickLength="6.0" upperBound="0.9" />
+                <NumberAxis label="PROBABILITY DENSITY" minorTickCount="0" side="LEFT" tickLabelGap="4.0" tickLength="6.0" upperBound="0.9" />
               </yAxis>
             </AreaChart>
             <GridPane>

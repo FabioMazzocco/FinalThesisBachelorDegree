@@ -45,7 +45,7 @@ The user can choose the parts and the relative quantities demanded: this is the 
 %2 --------------------------- PROBLEMA AFFRONTATO: Descrizione dettagliata del problema affrontato (partendo dal contesto operativo/aziendale, delineare il sotto-problema scelto, evidenziandone input, output, criticit\`a, potenzialit\`a, e rilevanza) ---------------------------
 \section{Problem}
 \subsection{Business context}
-The business context is a mechanical company where different components, parts, and products (items from now on) are fabricated by both using machines and manpower. One of the most important problems of this sector is the due date quotation because the production time is not deterministic and has a certain variability, this means that the mean time is not a good choice since there is only a certain percentage of probability that production will be completed by that date, e.g. if the statistical distribution is a normal distribution,  the cumulative probability is only 50\%. By using a statistical approach, it is possible to comprehend many different factors that create variability into two values: mean and variance. In this case, the production time variability does not depend on the quantity, but comes from other specific influences: material quality, environmental factors, workers presence and experience, equipment failures and quality problems that bring to reworking, suppliers reliability, downtime due to rest of the items after some operations. It is important to notice that the quantity is one of the causes of variability, but it is not relevant in relation to the others, so it can be considered negligible. A statistical aprroach is useful yet not sufficient, optimization of each factor, in order to minimize the variance, is needed.\\
+The business context is a mechanical company where different components, parts, and products (items from now on) are fabricated by both using machines and manpower. One of the most important problems of this sector is the due date quotation because the production time is not deterministic and has a certain variability, this means that the mean time is not a good choice since there is only a certain percentage of probability that production will be completed by that date, e.g. if the statistical distribution is a normal distribution,  the cumulative probability is only 50\%. By using a statistical approach, it is possible to comprehend many different factors that create variability into two values: mean and variance. In this case, the production time variability does not depend on the quantity, but comes from other specific influences: material quality, environmental factors, workers presence and experience, equipment failures and quality problems that bring to reworking, suppliers reliability, downtime due to rest of the items after some operations. It is important to notice that the quantity is one of the causes of variability, but it is not relevant in relation to the others, so it can be considered negligible. A statistical approach is useful yet not sufficient, optimization of each factor, in order to minimize the variance, is needed.\\
 
 \subsection{Input, output, potentiality, importance of the problem}
 Starting from a group of parts, the relative quantities, and the probability, the software can calculate the date in which the distribution has the given cumulative probability for both the case of parallel and serial production\footnote{The production can be done in many ways: for this problem the two extremities are the serial production, each item (the whole quantity) is produced after the previous one, and the parallel production, each item is produced simultaneously}.  It is also important to consider the inverse problem because it often happens that the customer places the order for a certain date without consulting the seller or simply asks if the given date is possible, therefore the software can also do the inverse calculation. Both functions require a list of items and the order date, which is the day when the order is received or can be fictitious if the tool is used to decide whether to accept an order. \\
@@ -57,7 +57,7 @@ The last function is probably one of the most important, it is a simulation of t
 	\item the number of "lines", how many items can be produced or treated simultaneously. This is the only method that let the company choose them and do not consider only the two extremities
 	\item the maximum number of days from the order reception to the start of production, if it takes more time, the line is lost and will not be produced
 \end{itemize}
-As well as showing the number of order processed, the tool also calculates the actual quantity percentage, the starting and ending date of the given order, the lost ones, the ones satified with the stock, the total idleness of the production lines, the orders that were started the same day they were received. The simulation is random, so a single simulation is not significant to make decisions, this is the reason why "Simulation+" has been added: this section let the user simulate the period performances for a chosen number of times, the order of magnitude of the number of simulations should not exceed tens of thousands to have an answer in a adequate time, in addition, the accuracy of a simulation of this kind does not need to be the highest one, the results are pretty much the same once ten thousands simulations are run; anyway, it is possible to run more than a hundred thousands if needed.
+As well as showing the number of order processed, the tool also calculates the actual quantity percentage, the starting and ending date of the given order, the lost ones, the ones satisfied with the stock, the total idleness of the production lines, the orders that were started the same day they were received. The simulation is random, so a single simulation is not significant to make decisions, this is the reason why "Simulation+" has been added: this section let the user simulate the period performances for a chosen number of times, the order of magnitude of the number of simulations should not exceed tens of thousands to have an answer in an adequate time, in addition, the accuracy of a simulation of this kind does not need to be the highest one, the results are pretty much the same once ten thousand simulations are run; anyway, it is possible to run more than a hundred thousand if needed.
 
 
 \newpage
@@ -87,14 +87,14 @@ From the analysis of a sample of items, the random variables cannot be considere
 		\caption{Example of normality test run with Minitab\textsuperscript{\textregistered}}
 	\end{center}
 \end{figure}
-The reason could be that every value below zero (e.g. stock already present some days before the order date due to forecast orders) is converted into zero so data differ from the normal distribution. Anyway, this does not prove that the data is not following a normal distribution, in fact most of the data follow the days-percent line (see \textit{Figure 1}). A further analysis could confirm or reject this hypothesis, but, for the purpose of this thesis, they are considered normally distributed; an improved version could include the recognition of each item distribution.\\
-Since we can consider the items normally distributed, it is easy to calculate the mean and variance of a group of variables: the sum of two or more random variables that are normally distributed, is normally distributed as well:
+The reason could be that every value below zero (e.g. stock already present some days before the order date due to forecast orders) is converted into zero so data differ from the normal distribution. Anyway, this does not prove that the data is not following a normal distribution, in fact, most of the data follow the days-percent line (see \textit{Figure 1}). Further analysis could confirm or reject this hypothesis, but, for the purpose of this thesis, they are considered normally distributed; an improved version could include the recognition of each item distribution.\\
+Since we can consider the items normally distributed, it is easy to calculate the mean and variance of a group of variables: the sum of two or more random variables that are normally distributed is normally distributed as well:
 \begin{equation*}
 X \sim \mathbb{N}(\mu, \sigma)		\qquad \qquad where \qquad \qquad		\mu = \sum_{i} \mu_{i} 		 \qquad and\qquad			\sigma = \sqrt{\sum_{i} \sigma_{i}^{2}}
 \end{equation*}
 The standard deviation does not consider the covariance, the random variables are assumed independent because there is not enough information to be sure of a correlation, also, there are few items that share sub-components so, it can be considered negligible: this is a simplification. \\
 
-By using the "Normal distribution"\footnote{https://commons.apache.org/proper/commons-math/apidocs/index.html} class of Apache Common Math, it is possible to obtain the p-quantile with the "inverseCumulativeProbability(double p)" method, then it is turned into a discrete value\footnote{When the decimal portion is greater than 0.5, a day is added. Another choice could have been to add a day when the decimal portion is greater then zero.} that represents the maximum number of days to issue the order with a p-probability. \\
+By using the "Normal distribution"\footnote{https://commons.apache.org/proper/commons-math/apidocs/index.html} class of Apache Common Math, it is possible to obtain the p-quantile with the "inverseCumulativeProbability(double p)" method, then it is turned into a discrete value\footnote{When the decimal portion is greater than 0.5, a day is added. Another choice could have been to add a day when the decimal portion is greater than zero.} that represents the maximum number of days to issue the order with a p-probability. \\
 The same is done to find the cumulative probability of a certain date: the number of days is turned into a continuous value by adding less than 0.5 (maximum of the chances, see note\textsuperscript{3}) and the cumulative probability is obtained with the "cumulativeProbability(double x)" method. \\
 In case of parallel production: the quotation is done by considering each item alone, the largest number of days is the result; the probability is found by multiplying each probability, every item has a certain probability of being prepared by the chosen date:
 \begin{equation*}
@@ -102,11 +102,11 @@ In case of parallel production: the quotation is done by considering each item a
 \end{equation*}
 
 \subsection{Best rate algorithm}
-This function uses the recursion: all the combinations are tried, and the best result is shown. Starting from one item of the order, each other combination (without repetitions) is tried and, if the mix is within the constraints, the rate is calculated by using the due date quoting algorithm (see paragraph 4.1) for the number of production days. If the rate is greater, it becomes the new best rate. The recursive method calls itself adding an item until the termination conditions become true, then it deletes an item and tries agiain with another one, this way it considers all the possibilities.Since all the combinations are tried, the number of items is relevant, it is possible to obtain good computational times if the number of items is less than ten (10! =  3628800 cycles multiplied by all the operations of each one). \\
+This function uses the recursion: all the combinations are tried, and the best result is shown. Starting from one item of the order, each other combination (without repetitions) is tried and, if the mix is within the constraints, the rate is calculated by using the due date quoting algorithm (see paragraph 4.1) for the number of production days. If the rate is greater, it becomes the new best rate. The recursive method calls itself adding an item until the termination conditions become true, then it deletes an item and tries again with another one, this way it considers all the possibilities. Since all the combinations are tried, the number of items is relevant, it is possible to obtain good computational times if the number of items is less than ten (10! =  3628800 cycles multiplied by all the operations of each one). \\
 
 \subsection{Simulation algorithm}
  This is a discrete-event simulation: the orders from the selected year are added to a PriorityQueue\footnote{https://docs.oracle.com/javase/8/docs/api/java/util/PriorityQueue.html}, so are the items of the given order. All the dates have the same year, i.e. the simulation start year. The Line objects are created, and the simulation starts: the less recent order is selected, the order date becomes the "current date" and a free line is chosen; in case of many free lines, the one with the greater idleness is picked; in case no line is free, the first one that is freed is picked and the "current day" changes to the first day of availability of the line. This way, all the orders are processed until the current date exceeds the simulation ending date or all the orders are treated. In the meantime, the statistics are updated in accordance with the happened event. \\
-For the "Simulation+" section, the simulation algorithm is repeated for the chosen number of times and the results are added each time and, at the end, divided by the simulations number to calculate the mean values of the statistics.\\
+For the "Simulation+" section, the simulation algorithm is repeated for the chosen number of times and the results are added each time and, in the end, divided by the number of simulations to calculate the mean values of the statistics.\\
 From the statistical side, the simulation does not lean on the due date algorithm (see paragraph 4.1), instead, all the items are considered individually because the number of production days for the part  is the outcome of a random variable, so the addition of the single random variables is no more needed, there are now numbers to be added and the random variables are set aside.
 
 \newpage
@@ -117,31 +117,44 @@ From the statistical side, the simulation does not lean on the due date algorith
    	 \includegraphics[width=16cm]{classesDiagram}
 	\caption{Most important classes diagram. Please notice that private variables and methods were not included}
 \end{figure}
-\textit{ThesisModel} is the class that manages all the requests from the user interface: connects to \textit{OrdersDAO} to load the data from the database (using the connection given by \textit{DBConnect} class); manages the requests for the due date quotation and probability thanks to hte \textit{DueDataCalculator} class; starts and runs the recursion for the "Best Rate"; connects to hte \textit{Simulator} to manage both the single simulation and the "Simulation +".\\
-The whole system works using classes that represents the parts (class \textit{Part}), the orders (class \textit{Order}), and the production lines (class \textit{Line}).\\
-In \textit{Figure 3}, there are some missing classes, most of them are from the \textit{it.polito.s234844.thesis} package which contains the controllers for the FXML files, that are the view and controller parts of the model-view-controller pattern. 
+\textit{ThesisModel} is the class that manages all the requests from the user interface: connects to \textit{OrdersDAO} to load the data from the database (using the connection given by \textit{DBConnect} class); manages the requests for the due date quotation and probability thanks to the \textit{DueDataCalculator} class; starts and runs the recursion for the "Best Rate"; connects to the \textit{Simulator} to manage both the single simulation and the "Simulation +".\\
+The whole system works using classes that represent the parts (class \textit{Part}), the orders (class \textit{Order}), and the production lines (class \textit{Line}).\\
+In \textit{Figure 3}, there are some missing classes, most of them are from the \textit{it.polito.s234844.thesis} package which contains the controllers for the FXML files, that is the view and controller parts of the model-view-controller pattern. 
 
 \newpage
 %6 ------------------------------------------------------------------------------------------------------------------- VIDEATE E LINK YOUTUBE -------------------------------------------------------------------------------------------------------------------
 \section{Software screenshots and video}
-Alcune videate dell’applicazione realizzata e link al video dimostrativo del software
 \begin{figure}[H]
 	\centering
-   	 \includegraphics[width=6cm]{homepage}
+   	 \includegraphics[width=6.5cm]{homepage}
 	\caption{Screenshot of the software's homepage}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-   	 \includegraphics[width=6cm]{bestrate}
+   	 \includegraphics[width=6.5cm]{dueDateQuoting}
+	\caption{Screenshot of the "Due Date Quoting" function}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+   	 \includegraphics[width=6.5cm]{dueDateProbability}
+	\caption{Screenshot of the "Due Date Probability" function}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+   	 \includegraphics[width=6.5cm]{bestrate}
 	\caption{Screenshot of the "Best rate" function}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
-   	 \includegraphics[width=6cm]{simulationplus}
+   	 \includegraphics[width=6.5cm]{simulationPlus}
 	\caption{Screenshot of the "Simulation+" function}
 \end{figure}
+
+It is available a quick "Get started guide" on Youtube: INSERIRE LINK
 
 \newpage
 %7 ------------------------------------------------------------------------------------------------------------------- TABELLE E RISULTATI SPERIMENTALI -------------------------------------------------------------------------------------------------------------------
@@ -179,7 +192,7 @@ The "Best Rate" function is a pure decision-making tool, it could be important i
 \caption{"Simulation+" processing times, mean value on 5 attempts (2 months long period, 4 lines, 1 attempt for each of the last 5 years)}
 \label{tab:simulation-plus}
 \end{table}\\
-The "Simulation+" function could really help in deciding, the decision-maker can see a real-world case of the acceptance (or the performances) of the order in many attempts so that can see the possible outcomes and their variability, this is a the greatest contribution to the problem, it would be perfect if all the orders of that period were already known. Still, there could be more constraints: giving priority to some customer, the exclusion of some non-working days or public holidays, the loading of a mix of orders from the past years instead of taking them all from a single year.  Anyway, the possibilty to simulate more then an hundred thousand times in two minutes (see \textit{Table \ref{tab:simulation-plus}}) is more than enough, after ten thousand times, the values tends to level off.
+The "Simulation+" function could really help in deciding, the decision-maker can see a real-world case of the acceptance (or the performances) of the order in many attempts so that can see the possible outcomes and their variability, this is the greatest contribution to the problem, it would be perfect if all the orders of that period were already known. Still, there could be more constraints: giving priority to some customer, the exclusion of some non-working days or public holidays, the loading of a mix of orders from the past years instead of taking them all from a single year.  Anyway, the possibility to simulate more than a hundred thousand times in two minutes (see \textit{Table \ref{tab:simulation-plus}}) is more than enough, in fact, after ten thousand simulations, the values tend to level off. In \textit{Table \ref{tab:simulation-plus}} case, a decision can be taken in about 13 seconds with the data of ten thousand different simulation output put together.
 
 
 \newpage

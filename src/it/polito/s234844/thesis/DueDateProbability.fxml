@@ -101,10 +101,10 @@
             </GridPane>
             <AreaChart fx:id="dueDateProbabilityChart" horizontalGridLinesVisible="false" legendVisible="false">
               <xAxis>
-                <NumberAxis minorTickVisible="false" side="BOTTOM" />
+                <NumberAxis label="DAYS" minorTickVisible="false" side="BOTTOM" />
               </xAxis>
               <yAxis>
-                <NumberAxis minorTickVisible="false" side="LEFT" upperBound="1.0" />
+                <NumberAxis label="CUMULATIVE PROBABILITY" minorTickVisible="false" side="LEFT" upperBound="1.0" />
               </yAxis>
                <VBox.margin>
                   <Insets top="20.0" />

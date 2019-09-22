@@ -192,11 +192,11 @@ public class DueDateQuotingController {
         XYChart.Series<Number, Number> serie0 = new XYChart.Series<Number, Number>();
         
 		for(double i=0; i<=normal.inverseCumulativeProbability(maxProbability); i = i+0.7) {
-			XYChart.Data<Number, Number> data = new XYChart.Data<Number, Number>(i, normal.cumulativeProbability(i));
+			XYChart.Data<Number, Number> data = new XYChart.Data<Number, Number>(i, normal.density(i));
 			
 			serie0.getData().add(data);
 		}
-		XYChart.Data<Number, Number> lastData = new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), maxProbability);
+		XYChart.Data<Number, Number> lastData = new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), normal.density(normal.inverseCumulativeProbability(maxProbability)));
 		serie0.getData().add(lastData);
 		this.dueDateQuotingChart.getData().add(serie0);
 		
@@ -204,27 +204,27 @@ public class DueDateQuotingController {
         XYChart.Series<Number, Number> serie1 = new XYChart.Series<Number, Number>();
         
 		for(double i=0; i<normal.inverseCumulativeProbability(0.9999); i = i+0.7) {
-			XYChart.Data<Number, Number> data = new XYChart.Data<Number, Number>(i, normal.cumulativeProbability(i));
+			XYChart.Data<Number, Number> data = new XYChart.Data<Number, Number>(i, normal.density(i));
 			
 			serie1.getData().add(data);
 		}
-		serie1.getData().add(new XYChart.Data<Number,Number>(normal.inverseCumulativeProbability(0.9999),1.0));
+		serie1.getData().add(new XYChart.Data<Number,Number>(normal.inverseCumulativeProbability(0.9999),normal.density(normal.inverseCumulativeProbability(0.9999))));
 		this.dueDateQuotingChart.getData().add(serie1);
 		
 		//Point
 		XYChart.Series<Number, Number> serie2 = new XYChart.Series<Number, Number>();
-		XYChart.Data<Number, Number> point = new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), maxProbability);
+		XYChart.Data<Number, Number> point = new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), normal.density(normal.inverseCumulativeProbability(maxProbability)));
 		serie2.getData().add(point);
 		this.dueDateQuotingChart.getData().add(serie2);
 		
 		//Two lines
 		XYChart.Series<Number, Number> serie3 = new XYChart.Series<Number, Number>();
-		serie3.getData().add(new XYChart.Data<Number, Number>(0, maxProbability));
-		serie3.getData().add(new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), maxProbability));
+		serie3.getData().add(new XYChart.Data<Number, Number>(0, normal.density(normal.inverseCumulativeProbability(maxProbability))));
+		serie3.getData().add(new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), normal.density(normal.inverseCumulativeProbability(maxProbability))));
 		
 		XYChart.Series<Number, Number> serie4 = new XYChart.Series<Number, Number>();
 		serie4.getData().add(new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), 0));
-		serie4.getData().add(new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), maxProbability));
+		serie4.getData().add(new XYChart.Data<Number, Number>(normal.inverseCumulativeProbability(maxProbability), normal.density(normal.inverseCumulativeProbability(maxProbability))));
 		
 		this.dueDateQuotingChart.getData().add(serie3);
 		this.dueDateQuotingChart.getData().add(serie4);
