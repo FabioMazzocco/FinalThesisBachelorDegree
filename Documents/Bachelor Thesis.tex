@@ -8,15 +8,15 @@
 \usepackage[center]{caption}
 \begin{document}
 
-%FRONTESPIZIO
+% ------------------------------------------------------------------------------------------------------------------- FRONTESPIZIO -------------------------------------------------------------------------------------------------------------------
 \include{frontespizio}
 
 \title{Statistical due date for customers satisfaction }
 \author{Fabio Mazzocco - Student  234844}
-\date{August 2019}
+\date{August-September 2019}
 \maketitle
 
-%1 PROPOSTA DI PROGETTO
+%1 ------------------------------------------------------------------------------------------------------------------- PROPOSTA DI PROGETTO -------------------------------------------------------------------------------------------------------------------
 \section{Project proposal} 
 \subsection{Proposal title}
 Statistical due date for customers satisfaction
@@ -42,7 +42,7 @@ Due date quoting (from "Programmazione e gestione della produzione" classes) is 
 The user can choose the parts and the relative quantities demanded: this is the order. Through the due date quoting it is possible to choose a probability and the suggested due date is shown based on the parts statistical distributions. It is also possible to set a due date and check the relative probability using the inverse due date quoting algorithm. These two functionalities are available both for the parallel production of the parts and the serial one. In case of production picks, it is possible to calculate the best parts mix to be produced/issued at first in order to maximize the quantity/days rate setting the probability and the minimum quantity of parts to be delivered (this can be useful if lines can be issued before the full completion of the order). In the end, it is possible to simulate the behavior of the order in a certain period regulating the number of parts that can be produced simultaneously (due date quoting is applied with a random probability to the single parts in order to determine the random number of days of each one).
 
 \newpage
-%2 PROBLEMA AFFRONTATO: Descrizione dettagliata del problema affrontato (partendo dal contesto operativo/aziendale, delineare il sotto-problema scelto, evidenziandone input, output, criticit\`a, potenzialit\`a, e rilevanza) 
+%2 --------------------------- PROBLEMA AFFRONTATO: Descrizione dettagliata del problema affrontato (partendo dal contesto operativo/aziendale, delineare il sotto-problema scelto, evidenziandone input, output, criticit\`a, potenzialit\`a, e rilevanza) ---------------------------
 \section{Problem}
 \subsection{Business context}
 The business context is a mechanical company where different components, parts, and products (items from now on) are fabricated by both using machines and manpower. One of the most important problems of this sector is the due date quotation because the production time is not deterministic and has a certain variability, this means that the mean time is not a good choice since there is only a certain percentage of probability that production will be completed by that date, e.g. if the statistical distribution is a normal distribution,  the cumulative probability is only 50\%. By using a statistical approach, it is possible to comprehend many different factors that create variability into two values: mean and variance. In this case, the production time variability does not depend on the quantity, but comes from other specific influences: material quality, environmental factors, workers presence and experience, equipment failures and quality problems that bring to reworking, suppliers reliability, downtime due to rest of the items after some operations. It is important to notice that the quantity is one of the causes of variability, but it is not relevant in relation to the others, so it can be considered negligible. A statistical aprroach is useful yet not sufficient, optimization of each factor, in order to minimize the variance, is needed.\\
@@ -61,7 +61,7 @@ As well as showing the number of order processed, the tool also calculates the a
 
 
 \newpage
-%3 DATA-SET
+%3 ------------------------------------------------------------------------------------------------------------------------------------- DATA-SET ------------------------------------------------------------------------------------------------------------------------------------------
 \section{Data}
 The used data-set belongs to a mechanical company that both produces and stocks material. This is an incomplete collection because the whole one would have been too big considering that there are thousands of parts; for this reason, only twenty-three components were selected with more the 5500 lines, so the size can be considered significant. The order lines begin in 2012  and the last data are basically year-to-date. \\
 There are six columns:
@@ -76,7 +76,7 @@ There are six columns:
 Due to lack of further data, the simulation uses each line as an order (which is a common case), so "lost orders" or other statistics of this kind cannot count the real orders but their lines. For a real application, some few and easy changes to both the data-set and the software are needed.
 
 \newpage
-%4 STRUTTURE DATI E ALGORITMI UTILIZZATI: Descrizione ad alto livello delle strutture dati e degli algoritmi utilizzati
+%4 ---------------------------------------------------------------------------------------- STRUTTURE DATI E ALGORITMI UTILIZZATI: Descrizione ad alto livello delle strutture dati e degli algoritmi utilizzati -----------------------------------------------------------------------------------------
 \section{Software data structures and algorithms}
 
 \subsection{A statistical approach: the due date quotation}
@@ -110,19 +110,19 @@ For the "Simulation+" section, the simulation algorithm is repeated for the chos
 From the statistical side, the simulation does not lean on the due date algorithm (see paragraph 4.1), instead, all the items are considered individually because the number of production days for the part  is the outcome of a random variable, so the addition of the single random variables is no more needed, there are now numbers to be added and the random variables are set aside.
 
 \newpage
-%5 DIAGRAMMA DELLE CLASSI PRINCIPALI
+%5 -------------------------------------------------------------------------------------------------------------------  DIAGRAMMA DELLE CLASSI PRINCIPALI -------------------------------------------------------------------------------------------------------------------
 \section{Java classes}
 \begin{figure}[H]
 	\centering
    	 \includegraphics[width=16cm]{classesDiagram}
-	\caption{Most important classes diagram}
+	\caption{Most important classes diagram. Please notice that private variables and methods were not included}
 \end{figure}
 \textit{ThesisModel} is the class that manages all the requests from the user interface: connects to \textit{OrdersDAO} to load the data from the database (using the connection given by \textit{DBConnect} class); manages the requests for the due date quotation and probability thanks to hte \textit{DueDataCalculator} class; starts and runs the recursion for the "Best Rate"; connects to hte \textit{Simulator} to manage both the single simulation and the "Simulation +".\\
 The whole system works using classes that represents the parts (class \textit{Part}), the orders (class \textit{Order}), and the production lines (class \textit{Line}).\\
 In \textit{Figure 3}, there are some missing classes, most of them are from the \textit{it.polito.s234844.thesis} package which contains the controllers for the FXML files, that are the view and controller parts of the model-view-controller pattern. 
 
 \newpage
-%6 VIDEATE E LINK YOUTUBE
+%6 ------------------------------------------------------------------------------------------------------------------- VIDEATE E LINK YOUTUBE -------------------------------------------------------------------------------------------------------------------
 \section{Software screenshots and video}
 Alcune videate dell’applicazione realizzata e link al video dimostrativo del software
 \begin{figure}[H]
@@ -144,11 +144,42 @@ Alcune videate dell’applicazione realizzata e link al video dimostrativo del s
 \end{figure}
 
 \newpage
-%7 TABELLE E RISULTATI SPERIMENTALI
+%7 ------------------------------------------------------------------------------------------------------------------- TABELLE E RISULTATI SPERIMENTALI -------------------------------------------------------------------------------------------------------------------
 \section{Tests, results and final observations}
-Tabelle con risultati sperimentali ottenuti (risultati, valori, tempi, …)
-Valutazioni sui risultati ottenuti (punti di forza, punti di debolezza, contributo rispetto al problema aziendale descritto al punto 3) e conclusioni.\\
-Thanks to this tool, some main decisions can be taken, the due date quotation can be made consciously. Clearly, the software cannot consider the current status of the production so it does not differentiate the cases, it is crucial to follow the given due date but it is also important to supply the customer as fast as possible, so a further version of the tool could consider the environmental status to provide a more accurate due date forecast. The "Best Rate" function is a pure decision-making tool, unless all the parts are equal under all points of view, the output is rough, some more evaluations need to be made in term of revenue and importance of the item. The "Simulation+" function could really help in deciding, the decision-maker can see a real-world case of the acceptance (or the performances) of the order in many attempts so that can see the possible outcomes and their variability, this is a the greatest contribution to the problem, it would be perfect if all the orders of that period would be already known. Still, there could be more constraints: giving priority to some customer, the exclusion of some non-working days or public holidays, the loading of a mix of orders from the past years instead of taking them all from a single year.  TO BE CONTINUED
+Thanks to this tool, some main decisions can be taken, the due date quotation can be made consciously. Clearly, the software cannot consider the current status of the production so it does not differentiate the cases, it is crucial to follow the given due date but it is also important to supply the customer as fast as possible, so a further version of the tool could consider the environmental status to provide a more accurate due date forecast. \\
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+Items & Mean time (20 attempts) \\ \hline
+2 & 7 ms \\ \hline
+3 & 7.2 ms \\ \hline
+4 & 7.4 ms \\ \hline
+5 & 11.7 ms \\ \hline
+6 & 40.2 ms \\ \hline
+7 & 201 ms \\ \hline
+8 & 1548 ms \\ \hline
+9 & 14120 ms \\ \hline
+\end{tabular}
+\caption{"Best rate" times with different number of items, mean value on 20 attempts}
+\label{tab:best-rate}
+\end{table}\\
+The "Best Rate" function is a pure decision-making tool, it could be important in case of production peaks but, unless all the parts are equal under all points of view, the output is rough, some more evaluations need to be made in term of revenue and importance of the item. Processing times (available in \textit{Table \ref{tab:best-rate}}) underline the importance of the number of items of the order in providing an output in a reasonable time. \\
+\begin{table}[htb]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\#Simulations & Mean time (5 attempts) \\ \hline
+10 & 145 ms \\ \hline
+100 & 253 ms \\ \hline
+1000 & 1450 ms \\ \hline
+10000 & 13200 ms \\ \hline
+100000 & 134000 ms \\ \hline
+\end{tabular}
+\caption{"Simulation+" processing times, mean value on 5 attempts (2 months long period, 4 lines, 1 attempt for each of the last 5 years)}
+\label{tab:simulation-plus}
+\end{table}\\
+The "Simulation+" function could really help in deciding, the decision-maker can see a real-world case of the acceptance (or the performances) of the order in many attempts so that can see the possible outcomes and their variability, this is a the greatest contribution to the problem, it would be perfect if all the orders of that period were already known. Still, there could be more constraints: giving priority to some customer, the exclusion of some non-working days or public holidays, the loading of a mix of orders from the past years instead of taking them all from a single year.  Anyway, the possibilty to simulate more then an hundred thousand times in two minutes (see \textit{Table \ref{tab:simulation-plus}}) is more than enough, after ten thousand times, the values tends to level off.
 
 
 \newpage
