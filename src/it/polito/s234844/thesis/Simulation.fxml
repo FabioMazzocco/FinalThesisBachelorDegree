@@ -127,7 +127,7 @@
                                     <Insets />
                                  </VBox.margin>
                                  <children>
-                                    <Button fx:id="btnSimulate" defaultButton="true" mnemonicParsing="false" onAction="#handleSimulation" prefWidth="440.0" text="Button">
+                                    <Button fx:id="btnSimulate" defaultButton="true" mnemonicParsing="false" onAction="#handleSimulation" prefWidth="440.0" text="Simulate">
                                        <GridPane.margin>
                                           <Insets top="5.0" />
                                        </GridPane.margin>
@@ -362,7 +362,7 @@
                                     <Insets />
                                  </VBox.margin>
                                  <children>
-                                    <Button fx:id="btnSimulate1" defaultButton="true" mnemonicParsing="false" onAction="#handleSimulationPlus" prefWidth="440.0" text="Button">
+                                    <Button fx:id="btnSimulate1" defaultButton="true" mnemonicParsing="false" onAction="#handleSimulationPlus" prefWidth="440.0" text="Simulate">
                                        <GridPane.margin>
                                           <Insets top="5.0" />
                                        </GridPane.margin>

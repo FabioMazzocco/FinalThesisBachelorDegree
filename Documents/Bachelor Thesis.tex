@@ -6,6 +6,9 @@
 \usepackage{textcomp }
 \usepackage{float}
 \usepackage[center]{caption}
+\usepackage[hidelinks]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
 \begin{document}
 
 % ------------------------------------------------------------------------------------------------------------------- FRONTESPIZIO -------------------------------------------------------------------------------------------------------------------
@@ -15,6 +18,8 @@
 \author{Fabio Mazzocco - Student  234844}
 \date{August-September 2019}
 \maketitle
+
+\tableofcontents
 
 %1 ------------------------------------------------------------------------------------------------------------------- PROPOSTA DI PROGETTO -------------------------------------------------------------------------------------------------------------------
 \section{Project proposal} 
@@ -48,13 +53,13 @@ The user can choose the parts and the relative quantities demanded: this is the 
 The business context is a mechanical company where different components, parts, and products (items from now on) are fabricated by both using machines and manpower. One of the most important problems of this sector is the due date quotation because the production time is not deterministic and has a certain variability, this means that the mean time is not a good choice since there is only a certain percentage of probability that production will be completed by that date, e.g. if the statistical distribution is a normal distribution,  the cumulative probability is only 50\%. By using a statistical approach, it is possible to comprehend many different factors that create variability into two values: mean and variance. In this case, the production time variability does not depend on the quantity, but comes from other specific influences: material quality, environmental factors, workers presence and experience, equipment failures and quality problems that bring to reworking, suppliers reliability, downtime due to rest of the items after some operations. It is important to notice that the quantity is one of the causes of variability, but it is not relevant in relation to the others, so it can be considered negligible. A statistical approach is useful yet not sufficient, optimization of each factor, in order to minimize the variance, is needed.\\
 
 \subsection{Input, output, potentiality, importance of the problem}
-Starting from a group of parts, the relative quantities, and the probability, the software can calculate the date in which the distribution has the given cumulative probability for both the case of parallel and serial production\footnote{The production can be done in many ways: for this problem the two extremities are the serial production, each item (the whole quantity) is produced after the previous one, and the parallel production, each item is produced simultaneously}.  It is also important to consider the inverse problem because it often happens that the customer places the order for a certain date without consulting the seller or simply asks if the given date is possible, therefore the software can also do the inverse calculation. Both functions require a list of items and the order date, which is the day when the order is received or can be fictitious if the tool is used to decide whether to accept an order. \\
-Another function is the so-called "Best rate" that calculates the best mix of items to maximize the quantity-days rate with two settable constraints: the probability that is important to know the days the mix will take to be produced, and the minimum percentage of quantity to release. In case of peaks of production, this can be really important because the order can be partially issued to satisfy a part of the customer demand, releasing the best mix brings to a higher service level. Still, the higher costs of smaller deliveries represent a problem that the company can solve with different policies, if the solution is in-between (the two extremities would be: wait until the full order is ready or send the single items once they are prepared), this tool can help to calculate which parts should be produced first. \\
+Starting from a list of items (the order), the relative quantities, and the probability, the software can calculate the date in which the distribution has the given cumulative probability for both the case of parallel and serial production\footnote{The production can be done in many ways: for this problem the two extremities are the serial production, each item (the whole quantity) is produced after the previous one, and the parallel production, each item is produced simultaneously}.  It is also important to consider the inverse problem because it often happens that the customer places the order for a certain date without consulting the seller or simply asks if the given date is possible, therefore the software can also do the inverse calculation. Both functions require a list of items and the order date, which is the day when the order is received or can be fictitious if the tool is used to decide whether to accept an order. \\
+Another function is the so-called "Best rate" that calculates the best mix of items to maximize the quantity-days rate with two settable constraints: the probability, which is important to know to calculate the maximum amount of days that the mix will take to be produced, and the minimum percentage of quantity to be released. In case of peaks of production, this can be really important because the order can be partially issued to satisfy a part of the customer demand, releasing the best mix brings to a higher service level. Still, the higher costs of smaller deliveries represent a problem that the company can solve with different policies, if the solution is in-between (the two extremities would be: wait until the full order is ready or send the single items once they are prepared), this tool can help to calculate which parts should be produced first. \\
 The last function is probably one of the most important, it is a simulation of the production of the given order in a chosen period based on the previous years' data, it let the company tries the data in a real situation and see which improvements need to be made to optimize the production trying different combinations. The simulation, in contrast to the other functions, uses a random outcome of the random variables, there is no more a given amount of days, whereas every time the production duration changes, repeating the same simulation means having different results. It is possible to set some parameters:
 \begin{itemize}
 	\item the simulation starting and ending date (must include the order date)
-	\item the data year from the ones present in the data-set except for the current or last one
-	\item the number of "lines", how many items can be produced or treated simultaneously. This is the only method that let the company choose them and do not consider only the two extremities
+	\item the data's year from the ones present in the data-set except for the current or last one
+	\item the number of "lines", how many items can be produced or treated simultaneously. This is the only method that let the company choose freely and do not consider only the two extremities
 	\item the maximum number of days from the order reception to the start of production, if it takes more time, the line is lost and will not be produced
 \end{itemize}
 As well as showing the number of order processed, the tool also calculates the actual quantity percentage, the starting and ending date of the given order, the lost ones, the ones satisfied with the stock, the total idleness of the production lines, the orders that were started the same day they were received. The simulation is random, so a single simulation is not significant to make decisions, this is the reason why "Simulation+" has been added: this section let the user simulate the period performances for a chosen number of times, the order of magnitude of the number of simulations should not exceed tens of thousands to have an answer in an adequate time, in addition, the accuracy of a simulation of this kind does not need to be the highest one, the results are pretty much the same once ten thousand simulations are run; anyway, it is possible to run more than a hundred thousand if needed.
@@ -88,7 +93,7 @@ From the analysis of a sample of items, the random variables cannot be considere
 	\end{center}
 \end{figure}
 The reason could be that every value below zero (e.g. stock already present some days before the order date due to forecast orders) is converted into zero so data differ from the normal distribution. Anyway, this does not prove that the data is not following a normal distribution, in fact, most of the data follow the days-percent line (see \textit{Figure 1}). Further analysis could confirm or reject this hypothesis, but, for the purpose of this thesis, they are considered normally distributed; an improved version could include the recognition of each item distribution.\\
-Since we can consider the items normally distributed, it is easy to calculate the mean and variance of a group of variables: the sum of two or more random variables that are normally distributed is normally distributed as well:
+Since the items are considered normally distributed, it is easy to calculate the mean and variance of a group of variables: the sum of two or more random variables that are normally distributed is normally distributed as well:
 \begin{equation*}
 X \sim \mathbb{N}(\mu, \sigma)		\qquad \qquad where \qquad \qquad		\mu = \sum_{i} \mu_{i} 		 \qquad and\qquad			\sigma = \sqrt{\sum_{i} \sigma_{i}^{2}}
 \end{equation*}
@@ -154,7 +159,7 @@ In \textit{Figure 3}, there are some missing classes, most of them are from the 
 	\caption{Screenshot of the "Simulation+" function}
 \end{figure}
 
-It is available a quick "Get started guide" on Youtube: INSERIRE LINK
+It is available a quick "Get started guide" on Youtube: \href{https://youtu.be/22U4bR31KPo}{https://youtu.be/22U4bR31KPo} 
 
 \newpage
 %7 ------------------------------------------------------------------------------------------------------------------- TABELLE E RISULTATI SPERIMENTALI -------------------------------------------------------------------------------------------------------------------
@@ -203,5 +208,6 @@ The "Simulation+" function could really help in deciding, the decision-maker can
 	\caption*{This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA).\\Read the full copy of the license at http://creativecommons.org/licenses/by-nc-sa/4.0}
 \end{figure*}
 \vspace*{\fill}
-
+\centering\footnotesize{Special thanks to Paul and Bogdan}
+\par\noindent\rule{\textwidth}{0.4pt}
 \end{document}
