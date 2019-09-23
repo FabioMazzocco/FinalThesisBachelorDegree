@@ -15,3 +15,5 @@ Guide to use this tool:
 3) Set username and password in the DBConnect class of the it.polito.s234844.thesis.db package to have access to the database server 
 
 4) Run the application
+------
+Link to Youtube video: https://www.youtube.com/watch?v=22U4bR31KPo
